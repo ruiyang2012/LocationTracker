@@ -50,7 +50,7 @@
   NSLog(@"%@", urlString);
   
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-  __weak LincLocation *weakSelf = self;
+
   [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
     if (error) {
       NSLog(@"Failed to send invitation code request: %@", [error localizedDescription]);
@@ -64,7 +64,7 @@
         if (jsonError != nil) {
           NSLog(@"Failed to retrieve json object for invitation code: %@", [jsonError localizedDescription]);
         } else {
-          [weakSelf parseFourSquareResponse:json];
+          callback(json);
         }
       }
     }

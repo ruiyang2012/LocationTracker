@@ -38,4 +38,9 @@
 + (NSInteger) daysBetween:(NSDate*) from to:(NSDate *) to;
 
 + (NSString*)sha1:(NSString*)input;
+
++ (NSString *) getDocumentRootPath;
+
++ (NSDictionary *)queryStringToDictionary:(NSString *)queryString;
++ (NSString *)dictionaryToQueryString:(NSDictionary *)dictionary;
 @end

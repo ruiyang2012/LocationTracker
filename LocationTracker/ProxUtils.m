@@ -11,6 +11,7 @@
 #import <CommonCrypto/CommonCrypto.h>
 
 static NSString* baseGuid = nil;
+static NSString * docRoot = nil;
 
 @implementation ProxUtils
 
@@ -279,6 +280,46 @@ static NSString* baseGuid = nil;
   }
   
   return output;
+}
+
++ (NSDictionary *)queryStringToDictionary:(NSString *)queryString
+{
+  if (!queryString) {
+    return nil;
+  }
+  NSString *text = [queryString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  if (!text.length) {
+    return nil;
+  }
+  NSArray *pairs = [text componentsSeparatedByString:@"&"];
+  NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithCapacity:pairs.count];
+  for (NSString *keyValue in pairs) {
+    NSArray *pair = [keyValue componentsSeparatedByString:@"="];
+    if (pair.count > 1) {
+      [params setObject:[pair objectAtIndex:1] forKey:[pair objectAtIndex:0]];
+    }
+  }
+  return params;
+}
+
++ (NSString *)dictionaryToQueryString:(NSDictionary *)dictionary
+{
+  NSMutableArray *array = [[NSMutableArray alloc] init];
+  for (NSString *key in dictionary) {
+    [array addObject:[NSString stringWithFormat:@"%@=%@", key, dictionary[key]]];
+  }
+  return [array componentsJoinedByString:@"&"];
+}
+
++ (NSString *) getDocumentRootPath {
+  @synchronized(docRoot) {
+    if (!docRoot) {
+      docRoot = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+                 objectAtIndex:0];
+    }
+  }
+  
+  return docRoot;
 }
 
 @end
