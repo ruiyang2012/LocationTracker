@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		241AA704192044AA00150304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA703192044AA00150304 /* Foundation.framework */; };
+		241AA706192044AA00150304 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA705192044AA00150304 /* CoreGraphics.framework */; };
+		241AA708192044AA00150304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA707192044AA00150304 /* UIKit.framework */; };
+		241AA70E192044AA00150304 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 241AA70C192044AA00150304 /* InfoPlist.strings */; };
+		241AA710192044AA00150304 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA70F192044AA00150304 /* main.m */; };
+		241AA714192044AA00150304 /* ProxAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA713192044AA00150304 /* ProxAppDelegate.m */; };
+		241AA717192044AA00150304 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 241AA715192044AA00150304 /* Main_iPhone.storyboard */; };
+		241AA71A192044AA00150304 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 241AA718192044AA00150304 /* Main_iPad.storyboard */; };
+		241AA71D192044AA00150304 /* ProxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA71C192044AA00150304 /* ProxViewController.m */; };
+		241AA71F192044AA00150304 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 241AA71E192044AA00150304 /* Images.xcassets */; };
+		241AA726192044AA00150304 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA725192044AA00150304 /* XCTest.framework */; };
+		241AA727192044AA00150304 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA703192044AA00150304 /* Foundation.framework */; };
+		241AA728192044AA00150304 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA707192044AA00150304 /* UIKit.framework */; };
+		241AA730192044AA00150304 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 241AA72E192044AA00150304 /* InfoPlist.strings */; };
+		241AA732192044AA00150304 /* LocationTrackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA731192044AA00150304 /* LocationTrackerTests.m */; };
+		241AA73C192045F500150304 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA73B192045F500150304 /* CoreLocation.framework */; };
+		241AA73E192045FB00150304 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA73D192045FB00150304 /* MapKit.framework */; };
+		241AA746192049DD00150304 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA743192049DD00150304 /* FMDatabase.m */; };
+		241AA747192049DD00150304 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA745192049DD00150304 /* FMResultSet.m */; };
+		241AA74B19204A1400150304 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA74A19204A1400150304 /* libsqlite3.dylib */; };
+		241AA74E19204A3300150304 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA74D19204A3300150304 /* OfflineManager.m */; };
+		241AA75119204A6100150304 /* ProxUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75019204A6100150304 /* ProxUtils.m */; };
+		241AA75419204A6C00150304 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75319204A6C00150304 /* Reachability.m */; };
+		241AA75719204A7C00150304 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75619204A7C00150304 /* NSData+Base64.m */; };
+		241AA75A19204A8E00150304 /* ProxLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75919204A8E00150304 /* ProxLocationManager.m */; };
+		249233F919213645002AED31 /* prox.db in Resources */ = {isa = PBXBuildFile; fileRef = 241AA75B1920656B00150304 /* prox.db */; };
+		249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 249233FB19218A40002AED31 /* ProxGeoLookUp.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		241AA729192044AA00150304 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 241AA6F8192044AA00150304 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 241AA6FF192044AA00150304;
+			remoteInfo = LocationTracker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		241AA700192044AA00150304 /* LocationTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		241AA703192044AA00150304 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		241AA705192044AA00150304 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		241AA707192044AA00150304 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		241AA70B192044AA00150304 /* LocationTracker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LocationTracker-Info.plist"; sourceTree = "<group>"; };
+		241AA70D192044AA00150304 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		241AA70F192044AA00150304 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		241AA711192044AA00150304 /* LocationTracker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LocationTracker-Prefix.pch"; sourceTree = "<group>"; };
+		241AA712192044AA00150304 /* ProxAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProxAppDelegate.h; sourceTree = "<group>"; };
+		241AA713192044AA00150304 /* ProxAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProxAppDelegate.m; sourceTree = "<group>"; };
+		241AA716192044AA00150304 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		241AA719192044AA00150304 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		241AA71B192044AA00150304 /* ProxViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProxViewController.h; sourceTree = "<group>"; };
+		241AA71C192044AA00150304 /* ProxViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProxViewController.m; sourceTree = "<group>"; };
+		241AA71E192044AA00150304 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		241AA724192044AA00150304 /* LocationTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		241AA725192044AA00150304 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		241AA72D192044AA00150304 /* LocationTrackerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LocationTrackerTests-Info.plist"; sourceTree = "<group>"; };
+		241AA72F192044AA00150304 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		241AA731192044AA00150304 /* LocationTrackerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationTrackerTests.m; sourceTree = "<group>"; };
+		241AA73B192045F500150304 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		241AA73D192045FB00150304 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		241AA742192049DD00150304 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		241AA743192049DD00150304 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		241AA744192049DD00150304 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		241AA745192049DD00150304 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		241AA74819204A0000150304 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		241AA74A19204A1400150304 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		241AA74C19204A3300150304 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OfflineManager.h; path = ../OfflineManager.h; sourceTree = "<group>"; };
+		241AA74D19204A3300150304 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OfflineManager.m; path = ../OfflineManager.m; sourceTree = "<group>"; };
+		241AA74F19204A6100150304 /* ProxUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxUtils.h; sourceTree = "<group>"; };
+		241AA75019204A6100150304 /* ProxUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxUtils.m; sourceTree = "<group>"; };
+		241AA75219204A6C00150304 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		241AA75319204A6C00150304 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		241AA75519204A7C00150304 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		241AA75619204A7C00150304 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		241AA75819204A8E00150304 /* ProxLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxLocationManager.h; sourceTree = "<group>"; };
+		241AA75919204A8E00150304 /* ProxLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxLocationManager.m; sourceTree = "<group>"; };
+		241AA75B1920656B00150304 /* prox.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = prox.db; sourceTree = "<group>"; };
+		249233FA19218A40002AED31 /* ProxGeoLookUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxGeoLookUp.h; sourceTree = "<group>"; };
+		249233FB19218A40002AED31 /* ProxGeoLookUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxGeoLookUp.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		241AA6FD192044AA00150304 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				241AA74B19204A1400150304 /* libsqlite3.dylib in Frameworks */,
+				241AA73E192045FB00150304 /* MapKit.framework in Frameworks */,
+				241AA73C192045F500150304 /* CoreLocation.framework in Frameworks */,
+				241AA706192044AA00150304 /* CoreGraphics.framework in Frameworks */,
+				241AA708192044AA00150304 /* UIKit.framework in Frameworks */,
+				241AA704192044AA00150304 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		241AA721192044AA00150304 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				241AA726192044AA00150304 /* XCTest.framework in Frameworks */,
+				241AA728192044AA00150304 /* UIKit.framework in Frameworks */,
+				241AA727192044AA00150304 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		241AA6F7192044AA00150304 = {
+			isa = PBXGroup;
+			children = (
+				241AA709192044AA00150304 /* LocationTracker */,
+				241AA72B192044AA00150304 /* LocationTrackerTests */,
+				241AA702192044AA00150304 /* Frameworks */,
+				241AA701192044AA00150304 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		241AA701192044AA00150304 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				241AA700192044AA00150304 /* LocationTracker.app */,
+				241AA724192044AA00150304 /* LocationTrackerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		241AA702192044AA00150304 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				241AA74A19204A1400150304 /* libsqlite3.dylib */,
+				241AA74819204A0000150304 /* libsqlite3.0.dylib */,
+				241AA73D192045FB00150304 /* MapKit.framework */,
+				241AA73B192045F500150304 /* CoreLocation.framework */,
+				241AA703192044AA00150304 /* Foundation.framework */,
+				241AA705192044AA00150304 /* CoreGraphics.framework */,
+				241AA707192044AA00150304 /* UIKit.framework */,
+				241AA725192044AA00150304 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		241AA709192044AA00150304 /* LocationTracker */ = {
+			isa = PBXGroup;
+			children = (
+				241AA75519204A7C00150304 /* NSData+Base64.h */,
+				241AA75619204A7C00150304 /* NSData+Base64.m */,
+				241AA75819204A8E00150304 /* ProxLocationManager.h */,
+				241AA75919204A8E00150304 /* ProxLocationManager.m */,
+				241AA75219204A6C00150304 /* Reachability.h */,
+				241AA75319204A6C00150304 /* Reachability.m */,
+				241AA74F19204A6100150304 /* ProxUtils.h */,
+				241AA75019204A6100150304 /* ProxUtils.m */,
+				241AA74C19204A3300150304 /* OfflineManager.h */,
+				241AA74D19204A3300150304 /* OfflineManager.m */,
+				241AA742192049DD00150304 /* FMDatabase.h */,
+				241AA743192049DD00150304 /* FMDatabase.m */,
+				241AA744192049DD00150304 /* FMResultSet.h */,
+				241AA745192049DD00150304 /* FMResultSet.m */,
+				241AA712192044AA00150304 /* ProxAppDelegate.h */,
+				241AA713192044AA00150304 /* ProxAppDelegate.m */,
+				241AA715192044AA00150304 /* Main_iPhone.storyboard */,
+				241AA718192044AA00150304 /* Main_iPad.storyboard */,
+				241AA71B192044AA00150304 /* ProxViewController.h */,
+				241AA71C192044AA00150304 /* ProxViewController.m */,
+				241AA71E192044AA00150304 /* Images.xcassets */,
+				241AA70A192044AA00150304 /* Supporting Files */,
+				249233FA19218A40002AED31 /* ProxGeoLookUp.h */,
+				249233FB19218A40002AED31 /* ProxGeoLookUp.m */,
+			);
+			path = LocationTracker;
+			sourceTree = "<group>";
+		};
+		241AA70A192044AA00150304 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				241AA75B1920656B00150304 /* prox.db */,
+				241AA70B192044AA00150304 /* LocationTracker-Info.plist */,
+				241AA70C192044AA00150304 /* InfoPlist.strings */,
+				241AA70F192044AA00150304 /* main.m */,
+				241AA711192044AA00150304 /* LocationTracker-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		241AA72B192044AA00150304 /* LocationTrackerTests */ = {
+			isa = PBXGroup;
+			children = (
+				241AA731192044AA00150304 /* LocationTrackerTests.m */,
+				241AA72C192044AA00150304 /* Supporting Files */,
+			);
+			path = LocationTrackerTests;
+			sourceTree = "<group>";
+		};
+		241AA72C192044AA00150304 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				241AA72D192044AA00150304 /* LocationTrackerTests-Info.plist */,
+				241AA72E192044AA00150304 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		241AA6FF192044AA00150304 /* LocationTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 241AA735192044AA00150304 /* Build configuration list for PBXNativeTarget "LocationTracker" */;
+			buildPhases = (
+				241AA6FC192044AA00150304 /* Sources */,
+				241AA6FD192044AA00150304 /* Frameworks */,
+				241AA6FE192044AA00150304 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LocationTracker;
+			productName = LocationTracker;
+			productReference = 241AA700192044AA00150304 /* LocationTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		241AA723192044AA00150304 /* LocationTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 241AA738192044AA00150304 /* Build configuration list for PBXNativeTarget "LocationTrackerTests" */;
+			buildPhases = (
+				241AA720192044AA00150304 /* Sources */,
+				241AA721192044AA00150304 /* Frameworks */,
+				241AA722192044AA00150304 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				241AA72A192044AA00150304 /* PBXTargetDependency */,
+			);
+			name = LocationTrackerTests;
+			productName = LocationTrackerTests;
+			productReference = 241AA724192044AA00150304 /* LocationTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		241AA6F8192044AA00150304 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Prox;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Linc;
+				TargetAttributes = {
+					241AA723192044AA00150304 = {
+						TestTargetID = 241AA6FF192044AA00150304;
+					};
+				};
+			};
+			buildConfigurationList = 241AA6FB192044AA00150304 /* Build configuration list for PBXProject "LocationTracker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 241AA6F7192044AA00150304;
+			productRefGroup = 241AA701192044AA00150304 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				241AA6FF192044AA00150304 /* LocationTracker */,
+				241AA723192044AA00150304 /* LocationTrackerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		241AA6FE192044AA00150304 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				249233F919213645002AED31 /* prox.db in Resources */,
+				241AA71A192044AA00150304 /* Main_iPad.storyboard in Resources */,
+				241AA71F192044AA00150304 /* Images.xcassets in Resources */,
+				241AA717192044AA00150304 /* Main_iPhone.storyboard in Resources */,
+				241AA70E192044AA00150304 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		241AA722192044AA00150304 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				241AA730192044AA00150304 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		241AA6FC192044AA00150304 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */,
+				241AA710192044AA00150304 /* main.m in Sources */,
+				241AA75119204A6100150304 /* ProxUtils.m in Sources */,
+				241AA75419204A6C00150304 /* Reachability.m in Sources */,
+				241AA75A19204A8E00150304 /* ProxLocationManager.m in Sources */,
+				241AA74E19204A3300150304 /* OfflineManager.m in Sources */,
+				241AA71D192044AA00150304 /* ProxViewController.m in Sources */,
+				241AA714192044AA00150304 /* ProxAppDelegate.m in Sources */,
+				241AA746192049DD00150304 /* FMDatabase.m in Sources */,
+				241AA747192049DD00150304 /* FMResultSet.m in Sources */,
+				241AA75719204A7C00150304 /* NSData+Base64.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		241AA720192044AA00150304 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				241AA732192044AA00150304 /* LocationTrackerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		241AA72A192044AA00150304 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 241AA6FF192044AA00150304 /* LocationTracker */;
+			targetProxy = 241AA729192044AA00150304 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		241AA70C192044AA00150304 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				241AA70D192044AA00150304 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		241AA715192044AA00150304 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				241AA716192044AA00150304 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		241AA718192044AA00150304 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				241AA719192044AA00150304 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		241AA72E192044AA00150304 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				241AA72F192044AA00150304 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		241AA733192044AA00150304 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		241AA734192044AA00150304 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		241AA736192044AA00150304 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LocationTracker/LocationTracker-Prefix.pch";
+				INFOPLIST_FILE = "LocationTracker/LocationTracker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		241AA737192044AA00150304 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LocationTracker/LocationTracker-Prefix.pch";
+				INFOPLIST_FILE = "LocationTracker/LocationTracker-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		241AA739192044AA00150304 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LocationTracker.app/LocationTracker";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LocationTracker/LocationTracker-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "LocationTrackerTests/LocationTrackerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		241AA73A192044AA00150304 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LocationTracker.app/LocationTracker";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LocationTracker/LocationTracker-Prefix.pch";
+				INFOPLIST_FILE = "LocationTrackerTests/LocationTrackerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		241AA6FB192044AA00150304 /* Build configuration list for PBXProject "LocationTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				241AA733192044AA00150304 /* Debug */,
+				241AA734192044AA00150304 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		241AA735192044AA00150304 /* Build configuration list for PBXNativeTarget "LocationTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				241AA736192044AA00150304 /* Debug */,
+				241AA737192044AA00150304 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		241AA738192044AA00150304 /* Build configuration list for PBXNativeTarget "LocationTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				241AA739192044AA00150304 /* Debug */,
+				241AA73A192044AA00150304 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 241AA6F8192044AA00150304 /* Project object */;
+}
