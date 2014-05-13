@@ -5,8 +5,9 @@
 //  Created by rui yang on 5/12/14.
 //  Copyright (c) 2014 Linc. All rights reserved.
 //
-
+#import "ProxUtils.h"
 #import "ProxGeoLookUp.h"
+
 
 #define FOURSQUARE_CLIENT_ID     @"XESFJ1BM2GLVKIR0E05DNJWQLIWJXE2YIH15XYBQS0SL5DDB"
 #define FOURSQUARE_CLIENT_SECRET @"S02H4GVQCHPOSUB2G4XXZFHWX2RERYDMWA1H0VL2ZEZDYDHZ"
@@ -44,7 +45,7 @@
   parameters[@"radius"] = @"200";
   parameters[@"categoryId"] = [self foursquareCategories];
   
-  NSString *queryString = [NetworkUtil dictionaryToQueryString:parameters];
+  NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];
   NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?%@", queryString];
   NSURL *url = [[NSURL alloc] initWithString:urlString];
   NSLog(@"%@", urlString);

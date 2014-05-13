@@ -27,13 +27,13 @@
 		241AA746192049DD00150304 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA743192049DD00150304 /* FMDatabase.m */; };
 		241AA747192049DD00150304 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA745192049DD00150304 /* FMResultSet.m */; };
 		241AA74B19204A1400150304 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 241AA74A19204A1400150304 /* libsqlite3.dylib */; };
-		241AA74E19204A3300150304 /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA74D19204A3300150304 /* OfflineManager.m */; };
 		241AA75119204A6100150304 /* ProxUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75019204A6100150304 /* ProxUtils.m */; };
 		241AA75419204A6C00150304 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75319204A6C00150304 /* Reachability.m */; };
 		241AA75719204A7C00150304 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75619204A7C00150304 /* NSData+Base64.m */; };
 		241AA75A19204A8E00150304 /* ProxLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75919204A8E00150304 /* ProxLocationManager.m */; };
 		249233F919213645002AED31 /* prox.db in Resources */ = {isa = PBXBuildFile; fileRef = 241AA75B1920656B00150304 /* prox.db */; };
 		249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 249233FB19218A40002AED31 /* ProxGeoLookUp.m */; };
+		24DF582D1921D14100E7651F /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DF582C1921D14100E7651F /* OfflineManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,8 +75,6 @@
 		241AA745192049DD00150304 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		241AA74819204A0000150304 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		241AA74A19204A1400150304 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		241AA74C19204A3300150304 /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OfflineManager.h; path = ../OfflineManager.h; sourceTree = "<group>"; };
-		241AA74D19204A3300150304 /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OfflineManager.m; path = ../OfflineManager.m; sourceTree = "<group>"; };
 		241AA74F19204A6100150304 /* ProxUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxUtils.h; sourceTree = "<group>"; };
 		241AA75019204A6100150304 /* ProxUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxUtils.m; sourceTree = "<group>"; };
 		241AA75219204A6C00150304 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -88,6 +86,8 @@
 		241AA75B1920656B00150304 /* prox.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = prox.db; sourceTree = "<group>"; };
 		249233FA19218A40002AED31 /* ProxGeoLookUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxGeoLookUp.h; sourceTree = "<group>"; };
 		249233FB19218A40002AED31 /* ProxGeoLookUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxGeoLookUp.m; sourceTree = "<group>"; };
+		24DF582B1921D14100E7651F /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
+		24DF582C1921D14100E7651F /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +154,8 @@
 		241AA709192044AA00150304 /* LocationTracker */ = {
 			isa = PBXGroup;
 			children = (
+				24DF582B1921D14100E7651F /* OfflineManager.h */,
+				24DF582C1921D14100E7651F /* OfflineManager.m */,
 				241AA75519204A7C00150304 /* NSData+Base64.h */,
 				241AA75619204A7C00150304 /* NSData+Base64.m */,
 				241AA75819204A8E00150304 /* ProxLocationManager.h */,
@@ -162,8 +164,6 @@
 				241AA75319204A6C00150304 /* Reachability.m */,
 				241AA74F19204A6100150304 /* ProxUtils.h */,
 				241AA75019204A6100150304 /* ProxUtils.m */,
-				241AA74C19204A3300150304 /* OfflineManager.h */,
-				241AA74D19204A3300150304 /* OfflineManager.m */,
 				241AA742192049DD00150304 /* FMDatabase.h */,
 				241AA743192049DD00150304 /* FMDatabase.m */,
 				241AA744192049DD00150304 /* FMResultSet.h */,
@@ -313,11 +313,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */,
+				24DF582D1921D14100E7651F /* OfflineManager.m in Sources */,
 				241AA710192044AA00150304 /* main.m in Sources */,
 				241AA75119204A6100150304 /* ProxUtils.m in Sources */,
 				241AA75419204A6C00150304 /* Reachability.m in Sources */,
 				241AA75A19204A8E00150304 /* ProxLocationManager.m in Sources */,
-				241AA74E19204A3300150304 /* OfflineManager.m in Sources */,
 				241AA71D192044AA00150304 /* ProxViewController.m in Sources */,
 				241AA714192044AA00150304 /* ProxAppDelegate.m in Sources */,
 				241AA746192049DD00150304 /* FMDatabase.m in Sources */,
