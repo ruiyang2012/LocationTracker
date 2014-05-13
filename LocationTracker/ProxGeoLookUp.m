@@ -40,9 +40,9 @@
   parameters[@"client_secret"]= FOURSQUARE_CLIENT_SECRET;
   parameters[@"ll"] = [NSString stringWithFormat:@"%f,%f", coord.latitude, coord.longitude];
   parameters[@"intent"] = @"checkin";
-  parameters[@"limit"] = @"10";
+  parameters[@"limit"] = @"2";
   parameters[@"v"] = @"20140418";
-  parameters[@"radius"] = @"200";
+  parameters[@"radius"] = @"100";
   parameters[@"categoryId"] = [self foursquareCategories];
   
   NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];
