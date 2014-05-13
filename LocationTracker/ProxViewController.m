@@ -10,10 +10,14 @@
 #import "OfflineManager.h"
 #import "ProxLocationManager.h"
 
+#import "LincAnnotation.h"
+
 @interface ProxViewController () {
   OfflineManager * offlineMg;
   ProxLocationManager * locMg;
   int radius;
+
+  NSMutableDictionary * pins;
 }
 
 @end
@@ -26,6 +30,8 @@
 {
     [super viewDidLoad];
   radius = 4800;
+
+  pins = [[NSMutableDictionary alloc] init];
 	// Do any additional setup after loading the view, typically from a nib.
   self.mapView.delegate = self;
   offlineMg = [[OfflineManager alloc] init];
@@ -49,35 +55,39 @@
   [self updateMap];
 }
 
+
+- (CLLocation*) addOneMarker:(NSDictionary*) locDic {
+  NSString* bucket = [locDic objectForKey:@"bucket"];
+
+  LincAnnotation * pin =[pins objectForKey:bucket];
+  if (pin) { return pin.curLoc; }
+  
+  LincAnnotation * point = [[LincAnnotation alloc] init];
+  point.bucket = bucket;
+  point.locationDict = locDic;
+  [point updateWithMapView:self.mapView];
+  [pins setObject:point forKey:bucket];
+
+  return point.curLoc;
+}
+
 - (void) updateMap{
-  [self.mapView removeAnnotations:self.mapView.annotations];
+  
     // iterate all histogram:
   NSArray * todayLocations = [offlineMg getTodayLocations];
-  MKPointAnnotation *point = nil;
+
   CLLocation * lastLocation = nil;
   CLLocation * curLoc = nil;
   for (id locDic in todayLocations) {
-    double lat = [[locDic objectForKey:@"lat"] doubleValue];
-    double lon = [[locDic objectForKey:@"lon"] doubleValue];
-    int stay = [[locDic objectForKey:@"duration"] intValue] / 60;
-    point = [[MKPointAnnotation alloc] init];
     lastLocation = curLoc;
-    curLoc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-    point.coordinate = curLoc.coordinate;
-    point.title = [locDic objectForKey:@"name"];
-    point.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", [locDic objectForKey:@"street"], stay];
-    
-    [self.mapView addAnnotation:point];
-
+    curLoc = [self addOneMarker:locDic];
   }
   int latestDistance = [lastLocation distanceFromLocation:curLoc];
   if (latestDistance > radius / 1.5 && latestDistance < 1600 * 20) {
     radius = latestDistance * 1.5;
     NSLog(@"adjusted radius is %d", radius);
   }
-  if (point) {
-    [self centerAtLocation:point.coordinate];
-  }
+  if (curLoc) { [self centerAtLocation:curLoc.coordinate]; }
   
 
 }

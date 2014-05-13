@@ -25,20 +25,21 @@
 #define PURGE_ALL @"delete from proxobj where deleted=1"
 #define UPD_PROOBJ_VALUE @"UPDATE proxobj set json='%@', user_id='%ld', created='%ld' where oid='%@';"
 #define CORRECT_USER_ID_MODIFIED @"UPDATE  proxobj set user_id = %ld where user_id=0;"
-#define DB_SCHEMA_VER @"1.1"
+#define DB_SCHEMA_VER @"1.2"
 #define FIND_MATCH_HISTOGRAM @"SELECT count(1) as c FROM histogram where bucket='%@'"
 #define INIT_HISTOGRAM @"INSERT INTO histogram (bucket) VALUES ('%@');"
 #define UPD_HISTOGRAM @"UPDATE histogram set sums=sums + %d where bucket='%@';"
 #define INSERT_TIME_SERIES @"INSERT INTO time_series_data (time, t_type, t_value) VALUES (?,?,?)"
 #define GROUP_BY_LARGEST_TIME @"SELECT t_value, sum(delta) as s from time_series_data where t_type='apple_map' and  time > %d and time < %d group by t_value order by s desc limit 1"
-#define TODAY_LOCATIONS @"select bucket, sums, time, sum(delta) as d from histogram , time_series_data where t_value = bucket and time > %d  group by bucket  order by time"
+#define TODAY_LOCATIONS @"select bucket, display, sums, time, sum(delta) as d from histogram , time_series_data where t_value = bucket and time > %d  group by bucket  order by time"
 #define UPDATE_DELTA @"UPDATE time_series_data set delta= %d where time = %d"
 #define UPDATE_TIME_DATA_TYPE @"UPDATE time_series_data set t_type= '%@' where t_value = '%@'"
 #define GET_ALL_UNCONFIRMED_TIME @"select t_value, time from time_series_data where t_type='raw_data'"
 #define GET_ALL_AGGREGATE_TIME @"select t_value, sum(delta) as s from time_series_data where t_type='%@' and time >= %ld group by t_value"
 #define CAL_DELTA @"SELECT B.time, (A.time - B.time) as diff from time_series_data A INNER JOIN time_series_data B on A.ID > B.ID and A.t_type like 'raw_data%@' and B.t_type like 'raw_data%@'  and A.time > %ld group by A.ID"
-#define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket from histogram"
-#define GET_TOP_HISTOGRAM @"select bucket from histogram where sums > %d order by sums desc limit %d"
+#define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket, display from histogram"
+#define GET_TOP_HISTOGRAM @"select bucket, display from histogram where sums > %d order by sums desc limit %d"
+#define UPD_HISTOGRAM_DISPLAY @"UPDATE histogram set display = '%@' where bucket = '%@'"
 
 @interface OfflineManager () {
   NSString *databasePath;
@@ -548,7 +549,8 @@
     FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GET_TOP_HISTOGRAM, 60*5, 20]];
     while ([r next]) {
       NSString* bucket = [r stringForColumn:@"bucket"];
-      [array addObject:bucket];
+      NSString* display = [r stringForColumn:@"display"];
+      [array addObject:display ? display : bucket];
     }
   }
   return array;
@@ -566,6 +568,25 @@
   }
 }
 
+- (void) updateDisplayAddr:(NSString*) bucket lat:(double) lat lon:(double) lon name:(NSString*) name street:(NSString*) street
+                      city:(NSString*)city state:(NSString*) state country:(NSString*) country zip:(NSString*) zip {
+  NSString* latlon = [NSString stringWithFormat:@"%f|%f", lat, lon];
+  NSArray * arr = @[latlon, name, street, city, state, country, zip];
+  NSString * sql = [NSString stringWithFormat:UPD_HISTOGRAM_DISPLAY, [arr componentsJoinedByString:@"|"], bucket];
+  @synchronized(db) {
+    [db executeUpdate:sql];
+  }
+}
+
+- (NSDictionary *) decodeBucket:(NSString*) bucketString {
+  NSArray* bucket = [bucketString componentsSeparatedByString:@"|"];
+
+  NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:bucket[0], @"lat", bucket[1], @"lon",
+    bucket[2], @"name", bucket[3], @"street", bucket[4], @"city", bucket[5], @"state", bucket[6], @"country",
+    bucket[7], @"zip", bucketString, @"bucket", nil];
+  return dict;
+}
+
 - (NSArray*) getTodayLocations {
   FMResultSet * r = nil;
   
@@ -576,13 +597,19 @@
     NSMutableArray * arr = [[NSMutableArray alloc] init];
     r = [db executeQuery:[NSString stringWithFormat:TODAY_LOCATIONS, start]];
     while ([r next]) {
-      NSArray* bucket = [[r stringForColumn:@"bucket"] componentsSeparatedByString:@"|"];
+      NSString* bucket = [r stringForColumn:@"bucket"];
+      NSString * display = [r stringForColumn:@"display"];
+      BOOL hasDisplay = ![ProxUtils isEmptyString:display];
+      NSDictionary * dict = [self decodeBucket: hasDisplay ? display : bucket];
+      
       NSNumber* sum = [NSNumber  numberWithDouble:[r doubleForColumn:@"sums"] ];
       NSNumber* delta = [NSNumber  numberWithDouble:[r doubleForColumn:@"d"] ];
       NSNumber* time = [NSNumber  numberWithDouble:[r doubleForColumn:@"time"] ];
-      NSMutableDictionary * addr = [[NSMutableDictionary alloc] initWithObjectsAndKeys:sum, @"totalDuration",
-        delta, @"duration",bucket[0], @"lat", bucket[1], @"lon", time, @"time", bucket[2], @"name", bucket[3], @"street",
-        bucket[4], @"city", bucket[5], @"state", bucket[6], @"country", bucket[7], @"zip", nil];
+      NSMutableDictionary * addr = [[NSMutableDictionary alloc] initWithDictionary:dict];
+      [addr setObject:[NSNumber numberWithBool:hasDisplay] forKey:@"hasConfirmedAddress"];
+      [addr setObject:sum forKey:@"totalDuration"];
+      [addr setObject:delta forKey:@"duration"];
+      [addr setObject:time forKey:@"time"];
       [arr addObject:addr];
     }
 

@@ -34,6 +34,7 @@
 		249233F919213645002AED31 /* prox.db in Resources */ = {isa = PBXBuildFile; fileRef = 241AA75B1920656B00150304 /* prox.db */; };
 		249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 249233FB19218A40002AED31 /* ProxGeoLookUp.m */; };
 		24DF582D1921D14100E7651F /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DF582C1921D14100E7651F /* OfflineManager.m */; };
+		24DF583319229E0C00E7651F /* LincAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DF583219229E0C00E7651F /* LincAnnotation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,8 @@
 		249233FB19218A40002AED31 /* ProxGeoLookUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxGeoLookUp.m; sourceTree = "<group>"; };
 		24DF582B1921D14100E7651F /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
 		24DF582C1921D14100E7651F /* OfflineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineManager.m; sourceTree = "<group>"; };
+		24DF583119229E0C00E7651F /* LincAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LincAnnotation.h; sourceTree = "<group>"; };
+		24DF583219229E0C00E7651F /* LincAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LincAnnotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,8 @@
 				241AA70A192044AA00150304 /* Supporting Files */,
 				249233FA19218A40002AED31 /* ProxGeoLookUp.h */,
 				249233FB19218A40002AED31 /* ProxGeoLookUp.m */,
+				24DF583119229E0C00E7651F /* LincAnnotation.h */,
+				24DF583219229E0C00E7651F /* LincAnnotation.m */,
 			);
 			path = LocationTracker;
 			sourceTree = "<group>";
@@ -312,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24DF583319229E0C00E7651F /* LincAnnotation.m in Sources */,
 				249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */,
 				24DF582D1921D14100E7651F /* OfflineManager.m in Sources */,
 				241AA710192044AA00150304 /* main.m in Sources */,
