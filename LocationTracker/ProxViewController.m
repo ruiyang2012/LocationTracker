@@ -111,11 +111,11 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-  static NSString *SFAnnotationIdentifier = @"SFAnnotationIdentifier";
-  MKPinAnnotationView *pinView =
-  (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:SFAnnotationIdentifier];
-  NSLog(@"annotation");
-  return pinView;
+  if ([annotation isKindOfClass:[LincAnnotation class]]) {
+    LincAnnotation * lincAnno = annotation;
+    return [lincAnno getAnnotationView];
+  }
+  return nil;
 }
 
 @end

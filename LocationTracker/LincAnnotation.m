@@ -61,4 +61,18 @@
   }
 }
 
+- (MKAnnotationView*) getAnnotationView {
+  if (!_mapView) return nil;
+  static NSString *annotationIdentifier = @"LincAnnotation";
+  MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+  if (!annotationView) {
+    annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:self reuseIdentifier:annotationIdentifier];
+    annotationView.canShowCallout = YES;
+      //annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+  } else {
+    annotationView.annotation = self;
+  }
+  return annotationView;
+}
+
 @end

@@ -17,4 +17,5 @@
 @property(atomic, assign) BOOL hasConfirmedAddresses;
 
 - (void) updateWithMapView:(MKMapView*)mapView;
+- (MKAnnotationView*) getAnnotationView;
 @end
