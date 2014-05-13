@@ -16,11 +16,36 @@
   double lon;
   int stay;
   ProxGeoLookUp * geoTool;
+  NSDictionary* fourSqureResult;
+}
+
+- (void) show4Squre {
+  __weak LincAnnotation * weakSelf = self;
+  NSMutableArray * text = [[NSMutableArray alloc] init];
+  NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
+  [text addObject:[NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay]];
+  for (id venue in venues) {
+    NSString* name = venue[@"name"];
+      //        NSDictionary* addr = venue[@"location"];
+      //        NSString * street = [addr[@"address"] copy];
+      //        NSString * city = [addr[@"city"] copy];
+      //        NSString * state = [addr[@"state"] copy];
+      //        NSString * cc = [addr[@"cc"] copy];
+      //        NSString * zip = [addr[@"postalCode"] copy];
+    
+    
+      //[offlineMg updateDisplayAddr:bucket lat:lat lon:lon name:name street:street city:city state:state country:cc zip:zip];
+    [text addObject:[NSString stringWithFormat:@"one candidate: %@", name]];
+  }
+  dispatch_async(dispatch_get_main_queue(), ^{
+    self.subtitle = [text componentsJoinedByString:@"\n------\n"];
+    [_mapView addAnnotation:weakSelf];
+  });
 }
 
 - (void) updateWithMapView:(MKMapView*)mapView {
   _mapView = mapView;
-  __weak LincAnnotation * weakSelf = self;
+
   if (!geoTool) { geoTool = [[ProxGeoLookUp alloc] init]; }
   if (self.bucket == nil || self.locationDict == nil) return;
   lat = [[self.locationDict objectForKey:@"lat"] doubleValue];
@@ -32,32 +57,17 @@
   self.title = [self.locationDict objectForKey:@"name"];
   if (self.hasConfirmedAddresses) {
     self.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", [self.locationDict objectForKey:@"street"], stay];
-    [mapView addAnnotation:self];
+    [_mapView addAnnotation:self];
   } else {
-    [geoTool fourSquareLookup:self.coordinate done:^(NSDictionary *info) {
-        //NSLog(@"four square result: %@", info);
-      NSMutableArray * text = [[NSMutableArray alloc] init];
-      NSArray *venues = [info[@"response"] objectForKey:@"venues"];
-      [text addObject:[NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay]];
-      for (id venue in venues) {
-        NSString* name = venue[@"name"];
-          //        NSDictionary* addr = venue[@"location"];
-          //        NSString * street = [addr[@"address"] copy];
-          //        NSString * city = [addr[@"city"] copy];
-          //        NSString * state = [addr[@"state"] copy];
-          //        NSString * cc = [addr[@"cc"] copy];
-          //        NSString * zip = [addr[@"postalCode"] copy];
-        
-        
-          //[offlineMg updateDisplayAddr:bucket lat:lat lon:lon name:name street:street city:city state:state country:cc zip:zip];
-        [text addObject:[NSString stringWithFormat:@"one candidate: %@", name]];
-      }
-      dispatch_async(dispatch_get_main_queue(), ^{
-        self.subtitle = [text componentsJoinedByString:@"\n------\n"];
-        [mapView addAnnotation:weakSelf];
-      });
-      
-    }];
+    if (fourSqureResult) {
+      [self show4Squre];
+    } else {
+      [geoTool fourSquareLookup:self.coordinate done:^(NSDictionary *info) {
+          //NSLog(@"four square result: %@", info);
+        fourSqureResult = info;
+        [self show4Squre];
+      }];
+    }
   }
 }
 
