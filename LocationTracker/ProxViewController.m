@@ -55,6 +55,7 @@
   forceAddMarker = YES;
   if ([sender.title isEqualToString:@"All"]) {
     [sender setTitle:@"Today"];
+    [self updateMapFromTopLocations];
   } else {
     [sender setTitle:@"All"];
     [self updateMap];
@@ -94,6 +95,21 @@
   [pins setObject:point forKey:bucket];
 
   return point.curLoc;
+}
+
+- (void) addOneMarkerFromBucket:(NSString*) bucket {
+  LincAnnotation * point = [[LincAnnotation alloc] init];
+  point.bucket = bucket;
+  point.offlineMg = offlineMg;
+  [point updateWithMapView:self.mapView];
+  [pins setObject:point forKey:bucket];
+}
+
+- (void) updateMapFromTopLocations {
+  NSArray * allLocs = [offlineMg getLongestStayOfAllTime:300];
+  for (id bucket in allLocs) {
+    [self addOneMarkerFromBucket:bucket];
+  }
 }
 
 - (void) updateMap{
