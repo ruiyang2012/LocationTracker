@@ -32,6 +32,8 @@
   radius = 4800;
   isCenteredOnce = NO;
 
+  UIBarButtonItem * flipBtn = [[UIBarButtonItem alloc] initWithTitle:@"All" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleToday:)];
+  self.navigationItem.rightBarButtonItem = flipBtn;
   pins = [[NSMutableDictionary alloc] init];
 	// Do any additional setup after loading the view, typically from a nib.
   self.mapView.delegate = self;
@@ -41,6 +43,20 @@
   [notCenter addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [notCenter addObserver:self selector:@selector(locationChange:) name:@"locationChange" object:nil];
   [NSTimer scheduledTimerWithTimeInterval:60*5 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
+  
+  
+}
+
+- (IBAction) toggleToday:(UIBarButtonItem*)sender {
+  NSLog(@"Button Toggled");
+  [self.mapView removeAnnotations:[self.mapView annotations]];
+  if ([sender.title isEqualToString:@"All"]) {
+    [sender setTitle:@"Today"];
+  } else {
+    [sender setTitle:@"All"];
+    [pins removeAllObjects];
+    [self updateMap];
+  }
 }
 
 - (void)locationChange:(NSNotification*) notify {

@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Prox View Controller-->
+        <!--Prox View Controller - Location History-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ProxViewController" sceneMemberID="viewController">
@@ -23,7 +23,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="BRw-zB-lhq"/>
+                    <navigationItem key="navigationItem" title="Location History" id="BRw-zB-lhq"/>
                     <connections>
                         <outlet property="mapView" destination="wd7-56-1aD" id="Qyb-pn-gAS"/>
                     </connections>
