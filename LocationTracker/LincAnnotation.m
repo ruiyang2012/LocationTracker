@@ -17,28 +17,53 @@
   int stay;
   ProxGeoLookUp * geoTool;
   NSDictionary* fourSqureResult;
+  NSString * displayAddress;
+
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+  NSLog(@"selectd button %d", buttonIndex);
+  NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
+  if (buttonIndex > 0) {
+    NSDictionary * venue = [venues objectAtIndex:buttonIndex - 1];
+    NSString* name = [venue[@"name"] copy];
+    NSDictionary* addr = venue[@"location"];
+    displayAddress = [addr[@"address"] copy];
+    NSString * city = [addr[@"city"] copy];
+    NSString * state = [addr[@"state"] copy];
+    NSString * cc = [addr[@"cc"] copy];
+    NSString * zip = [addr[@"postalCode"] copy];
+      // self.title = @"foo";
+      // self.subtitle = @"changed!";
+    self.hasConfirmedAddresses = YES;
+    [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
+            street:displayAddress city:city state:state country:cc zip:zip];
+    
+  }
+}
+
+- (void) showAddressConfirm {
+  if (!_mapView || !fourSqureResult || self.hasConfirmedAddresses) return;
+
+  NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
+  UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Please Confirm Your Stay:" delegate:self
+                    cancelButtonTitle:nil destructiveButtonTitle:@"Cancel" otherButtonTitles:nil];
+  actionSheet.delegate = self;
+ 
+
+  for (id venue in venues) {
+    NSString* name = venue[@"name"];
+    [actionSheet addButtonWithTitle:name];
+
+  }
+  [actionSheet showInView:_mapView];
 }
 
 - (void) show4Squre {
   __weak LincAnnotation * weakSelf = self;
-  NSMutableArray * text = [[NSMutableArray alloc] init];
-  NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
-  [text addObject:[NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay]];
-  for (id venue in venues) {
-    NSString* name = venue[@"name"];
-      //        NSDictionary* addr = venue[@"location"];
-      //        NSString * street = [addr[@"address"] copy];
-      //        NSString * city = [addr[@"city"] copy];
-      //        NSString * state = [addr[@"state"] copy];
-      //        NSString * cc = [addr[@"cc"] copy];
-      //        NSString * zip = [addr[@"postalCode"] copy];
-    
-    
-      //[offlineMg updateDisplayAddr:bucket lat:lat lon:lon name:name street:street city:city state:state country:cc zip:zip];
-    [text addObject:[NSString stringWithFormat:@"one candidate: %@", name]];
-  }
   dispatch_async(dispatch_get_main_queue(), ^{
-    self.subtitle = [text componentsJoinedByString:@"\n------\n"];
+    NSString * subTitle = [NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay];
+    self.subtitle = subTitle;
     [_mapView addAnnotation:weakSelf];
   });
 }
@@ -51,6 +76,7 @@
   lat = [[self.locationDict objectForKey:@"lat"] doubleValue];
   lon = [[self.locationDict objectForKey:@"lon"] doubleValue];
   stay = [[self.locationDict objectForKey:@"duration"] intValue] / 60;
+
   self.hasConfirmedAddresses = [[self.locationDict objectForKey:@"hasConfirmedAddress"] boolValue];
   self.curLoc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
   self.coordinate = self.curLoc.coordinate;
@@ -84,5 +110,8 @@
   }
   return annotationView;
 }
+
+
+
 
 @end

@@ -65,6 +65,7 @@
   LincAnnotation * point = [[LincAnnotation alloc] init];
   point.bucket = bucket;
   point.locationDict = locDic;
+  point.offlineMg = offlineMg;
   [point updateWithMapView:self.mapView];
   [pins setObject:point forKey:bucket];
 
@@ -109,13 +110,12 @@
 
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
-{
-  if ([annotation isKindOfClass:[LincAnnotation class]]) {
-    LincAnnotation * lincAnno = annotation;
-    return [lincAnno getAnnotationView];
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+  if ([view.annotation isKindOfClass:[LincAnnotation class]]) {
+    LincAnnotation * anno = (LincAnnotation*) view.annotation;
+      //NSLog(@"did click view %@", anno);
+    [anno showAddressConfirm];
   }
-  return nil;
 }
 
 @end

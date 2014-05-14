@@ -568,14 +568,23 @@
   }
 }
 
-- (void) updateDisplayAddr:(NSString*) bucket lat:(double) lat lon:(double) lon name:(NSString*) name street:(NSString*) street
-                      city:(NSString*)city state:(NSString*) state country:(NSString*) country zip:(NSString*) zip {
+- (NSString*) updateDisplayAddr:(NSString*) bucket lat:(double) lat lon:(double) lon name:(NSString*) name
+      street:(NSString*) street city:(NSString*)city state:(NSString*) state country:(NSString*) country
+      zip:(NSString*) zip {
   NSString* latlon = [NSString stringWithFormat:@"%f|%f", lat, lon];
+  if (!name) name = @"";
+  if (!street) street = @"";
+  if (!city) city = @"";
+  if (!state) state = @"";
+  if (!country) country = @"";
+  if (!zip) zip = @"";
   NSArray * arr = @[latlon, name, street, city, state, country, zip];
-  NSString * sql = [NSString stringWithFormat:UPD_HISTOGRAM_DISPLAY, [arr componentsJoinedByString:@"|"], bucket];
+  NSString * display = [arr componentsJoinedByString:@"|"];
+  NSString * sql = [NSString stringWithFormat:UPD_HISTOGRAM_DISPLAY, display, bucket];
   @synchronized(db) {
     [db executeUpdate:sql];
   }
+  return display;
 }
 
 - (NSDictionary *) decodeBucket:(NSString*) bucketString {
