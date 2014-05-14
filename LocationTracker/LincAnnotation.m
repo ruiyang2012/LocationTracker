@@ -24,6 +24,7 @@
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
   NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
+  [_mapView deselectAnnotation:self animated:YES];
   if (buttonIndex > 0) {
     NSDictionary * venue = [venues objectAtIndex:buttonIndex - 1];
     NSString* name = [venue[@"name"] copy];
@@ -39,7 +40,6 @@
     self.hasConfirmedAddresses = YES;
     [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
             street:displayAddress city:city state:state country:cc zip:zip];
-    [_mapView deselectAnnotation:self animated:YES];
     
   }
 }
