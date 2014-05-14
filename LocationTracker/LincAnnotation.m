@@ -22,7 +22,7 @@
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-  NSLog(@"selectd button %d", buttonIndex);
+
   NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
   if (buttonIndex > 0) {
     NSDictionary * venue = [venues objectAtIndex:buttonIndex - 1];
