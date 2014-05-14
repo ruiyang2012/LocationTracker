@@ -33,8 +33,9 @@
     NSString * state = [addr[@"state"] copy];
     NSString * cc = [addr[@"cc"] copy];
     NSString * zip = [addr[@"postalCode"] copy];
-      // self.title = @"foo";
-      // self.subtitle = @"changed!";
+    self.title = name;
+
+    [self setSubTitleValue:displayAddress];
     self.hasConfirmedAddresses = YES;
     [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
             street:displayAddress city:city state:state country:cc zip:zip];
@@ -64,8 +65,13 @@
   dispatch_async(dispatch_get_main_queue(), ^{
     NSString * subTitle = [NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay];
     self.subtitle = subTitle;
+
     [_mapView addAnnotation:weakSelf];
   });
+}
+
+- (void) setSubTitleValue:(NSString*)v {
+  self.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", v, stay];
 }
 
 - (void) updateWithMapView:(MKMapView*)mapView {
@@ -82,7 +88,8 @@
   self.coordinate = self.curLoc.coordinate;
   self.title = [self.locationDict objectForKey:@"name"];
   if (self.hasConfirmedAddresses) {
-    self.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", [self.locationDict objectForKey:@"street"], stay];
+    [self setSubTitleValue:[self.locationDict objectForKey:@"street"]];
+    
     [_mapView addAnnotation:self];
   } else {
     if (fourSqureResult) {
