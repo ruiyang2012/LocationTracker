@@ -18,6 +18,7 @@
   int radius;
   BOOL isCenteredOnce;
   NSMutableDictionary * pins;
+  BOOL forceAddMarker;
 }
 
 @end
@@ -31,6 +32,7 @@
     [super viewDidLoad];
   radius = 4800;
   isCenteredOnce = NO;
+  forceAddMarker = NO;
 
   UIBarButtonItem * flipBtn = [[UIBarButtonItem alloc] initWithTitle:@"All" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleToday:)];
   self.navigationItem.rightBarButtonItem = flipBtn;
@@ -50,13 +52,14 @@
 - (IBAction) toggleToday:(UIBarButtonItem*)sender {
   NSLog(@"Button Toggled");
   [self.mapView removeAnnotations:[self.mapView annotations]];
+  forceAddMarker = YES;
   if ([sender.title isEqualToString:@"All"]) {
     [sender setTitle:@"Today"];
   } else {
     [sender setTitle:@"All"];
-    [pins removeAllObjects];
     [self updateMap];
   }
+  forceAddMarker = NO;
 }
 
 - (void)locationChange:(NSNotification*) notify {
@@ -77,7 +80,10 @@
   NSString* bucket = [locDic objectForKey:@"bucket"];
 
   LincAnnotation * pin =[pins objectForKey:bucket];
-  if (pin) { return pin.curLoc; }
+  if (pin) {
+    if (forceAddMarker) [self.mapView addAnnotation:pin];
+    return pin.curLoc;
+  }
   
   LincAnnotation * point = [[LincAnnotation alloc] init];
   point.bucket = bucket;
