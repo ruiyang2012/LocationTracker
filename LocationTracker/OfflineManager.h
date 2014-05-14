@@ -64,4 +64,7 @@
 
 - (NSString*) updateDisplayAddr:(NSString*) bucket lat:(double) lat lon:(double) lon name:(NSString*) name street:(NSString*) street
                       city:(NSString*)city state:(NSString*) state country:(NSString*) country zip:(NSString*) zip;
+
+- (NSDictionary *) decodeBucket:(NSString*) bucketString;
+
 @end

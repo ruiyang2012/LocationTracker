@@ -82,6 +82,7 @@
   LincAnnotation * pin =[pins objectForKey:bucket];
   if (pin) {
     if (forceAddMarker) [self.mapView addAnnotation:pin];
+    pin.locationDict = locDic;
     return pin.curLoc;
   }
   

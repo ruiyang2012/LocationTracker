@@ -18,6 +18,7 @@
   ProxGeoLookUp * geoTool;
   NSDictionary* fourSqureResult;
   NSString * displayAddress;
+  NSDictionary * bucketDict;
 
 }
 
@@ -75,25 +76,42 @@
 }
 
 - (void) setSubTitleValue:(NSString*)v {
-  self.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", v, stay];
+  if (stay < 0 ) {
+    self.subtitle = [NSString stringWithFormat:@"stay at %@", v];
+  } else {
+    self.subtitle = [NSString stringWithFormat:@"stay at %@ for %d mins", v, stay];
+  }
 }
 
 - (void) updateWithMapView:(MKMapView*)mapView {
   _mapView = mapView;
 
   if (!geoTool) { geoTool = [[ProxGeoLookUp alloc] init]; }
-  if (self.bucket == nil || self.locationDict == nil) return;
-  lat = [[self.locationDict objectForKey:@"lat"] doubleValue];
-  lon = [[self.locationDict objectForKey:@"lon"] doubleValue];
-  stay = [[self.locationDict objectForKey:@"duration"] intValue] / 60;
-
-  self.hasConfirmedAddresses = [[self.locationDict objectForKey:@"hasConfirmedAddress"] boolValue];
+  if (self.bucket == nil) return;
+  if (bucketDict == nil && self.locationDict == nil) {
+    bucketDict = [self.offlineMg decodeBucket:self.bucket];
+  }
+  NSDictionary * lookupDic = self.locationDict ? self.locationDict : bucketDict;
+  if (lookupDic == nil) return;
+  
+  
+  lat = [[lookupDic objectForKey:@"lat"] doubleValue];
+  lon = [[lookupDic objectForKey:@"lon"] doubleValue];
+  
   self.curLoc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
   self.coordinate = self.curLoc.coordinate;
-  self.title = [self.locationDict objectForKey:@"name"];
+  self.title = [lookupDic objectForKey:@"name"];
+  
+  if (bucketDict) {
+    stay = -1;
+    self.hasConfirmedAddresses = YES;
+  } else {
+    stay = [[self.locationDict objectForKey:@"duration"] intValue] / 60;
+    self.hasConfirmedAddresses = [[self.locationDict objectForKey:@"hasConfirmedAddress"] boolValue];
+  }
+
   if (self.hasConfirmedAddresses) {
-    [self setSubTitleValue:[self.locationDict objectForKey:@"street"]];
-    
+    [self setSubTitleValue:[lookupDic objectForKey:@"street"]];
     [_mapView addAnnotation:self];
   } else {
     if (fourSqureResult) {
