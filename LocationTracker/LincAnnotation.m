@@ -25,6 +25,7 @@
 
   NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
   [_mapView deselectAnnotation:self animated:YES];
+  NSNotificationCenter *notCenter = [NSNotificationCenter defaultCenter];
   if (buttonIndex > 0) {
     NSDictionary * venue = [venues objectAtIndex:buttonIndex - 1];
     NSString* name = [venue[@"name"] copy];
@@ -38,8 +39,10 @@
 
     [self setSubTitleValue:displayAddress];
     self.hasConfirmedAddresses = YES;
-    [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
+    NSString * newBucket = [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
             street:displayAddress city:city state:state country:cc zip:zip];
+    NSDictionary * obj = [[NSDictionary alloc] initWithObjectsAndKeys:self.bucket, @"old", newBucket, @"new", nil];
+    [notCenter postNotificationName:@"LincConfirmedAddress" object:obj];
     
   }
 }
