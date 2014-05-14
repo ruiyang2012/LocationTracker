@@ -39,6 +39,7 @@
     self.hasConfirmedAddresses = YES;
     [self.offlineMg updateDisplayAddr:self.bucket lat:lat lon:lon name:name
             street:displayAddress city:city state:state country:cc zip:zip];
+    [_mapView deselectAnnotation:self animated:YES];
     
   }
 }
