@@ -42,7 +42,7 @@
   parameters[@"intent"] = @"checkin";
   parameters[@"limit"] = @"4";
   parameters[@"v"] = @"20140418";
-  parameters[@"radius"] = @"80";
+  parameters[@"radius"] = @"100";
   parameters[@"categoryId"] = [self foursquareCategories];
   
   NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];

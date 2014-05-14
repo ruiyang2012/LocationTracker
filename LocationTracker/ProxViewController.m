@@ -114,7 +114,7 @@
   if ([view.annotation isKindOfClass:[LincAnnotation class]]) {
     LincAnnotation * anno = (LincAnnotation*) view.annotation;
       //NSLog(@"did click view %@", anno);
-    [anno showAddressConfirm];
+    [anno showAddressConfirm:self.mapView];
   }
 }
 

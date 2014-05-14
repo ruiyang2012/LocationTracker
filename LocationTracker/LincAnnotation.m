@@ -44,7 +44,7 @@
   }
 }
 
-- (void) showAddressConfirm {
+- (void) showAddressConfirm:(UIView*)inView {
   if (!_mapView || !fourSqureResult || self.hasConfirmedAddresses) return;
 
   NSArray *venues = [fourSqureResult[@"response"] objectForKey:@"venues"];
@@ -58,7 +58,7 @@
     [actionSheet addButtonWithTitle:name];
 
   }
-  [actionSheet showInView:_mapView];
+  [actionSheet showInView:inView];
 }
 
 - (void) show4Squre {

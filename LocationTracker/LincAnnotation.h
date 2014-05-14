@@ -20,5 +20,5 @@
 
 - (void) updateWithMapView:(MKMapView*)mapView;
 - (MKAnnotationView*) getAnnotationView;
-- (void) showAddressConfirm;
+- (void) showAddressConfirm:(UIView*)inView;
 @end
