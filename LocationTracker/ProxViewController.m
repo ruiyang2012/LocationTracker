@@ -16,7 +16,7 @@
   OfflineManager * offlineMg;
   ProxLocationManager * locMg;
   int radius;
-
+  BOOL isCenteredOnce;
   NSMutableDictionary * pins;
 }
 
@@ -30,6 +30,7 @@
 {
     [super viewDidLoad];
   radius = 4800;
+  isCenteredOnce = NO;
 
   pins = [[NSMutableDictionary alloc] init];
 	// Do any additional setup after loading the view, typically from a nib.
@@ -106,7 +107,10 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-  [self centerAtLocation:userLocation.coordinate];
+  if (!isCenteredOnce) {
+    [self centerAtLocation:userLocation.coordinate];
+  }
+  isCenteredOnce = YES;
 
 }
 
