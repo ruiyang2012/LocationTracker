@@ -543,10 +543,10 @@
   return result;
 }
 
-- (NSArray *) getLongestStayOfAllTime {
+- (NSArray *) getLongestStayOfAllTime:(int) minStaySeconds{
   NSMutableArray * array = [[NSMutableArray alloc] init];
   @synchronized(db) {
-    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GET_TOP_HISTOGRAM, 60*5, 20]];
+    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GET_TOP_HISTOGRAM, minStaySeconds, 20]];
     while ([r next]) {
       NSString* bucket = [r stringForColumn:@"bucket"];
       NSString* display = [r stringForColumn:@"display"];

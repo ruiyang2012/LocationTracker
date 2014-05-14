@@ -58,7 +58,7 @@
 - (NSArray*) getAllUnconfirmedGeo;
 - (NSArray*) getAllLocationCloseTo:(CLLocation*)cl radius:(double) radius;
 
-- (NSArray*) getLongestStayOfAllTime;
+- (NSArray*) getLongestStayOfAllTime:(int) minStaySeconds;
 
 - (NSString *) getObjType:(NSString*) objTypeName;
 

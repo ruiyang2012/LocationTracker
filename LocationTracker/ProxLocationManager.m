@@ -211,7 +211,7 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
 }
 
 - (void) checkRegionAndRule {
-  NSArray * regions = [offlineMg getLongestStayOfAllTime];
+  NSArray * regions = [offlineMg getLongestStayOfAllTime:300];
   for (id regionStr in regions) {
     CLLocation * cl = [self locationStrToLoc:regionStr sep:@"|"];
     if (cl) {
