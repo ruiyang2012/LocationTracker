@@ -120,6 +120,8 @@
   CLLocation * lastLocation = nil;
   CLLocation * curLoc = nil;
   for (id locDic in todayLocations) {
+    int stay = [[locDic objectForKey:@"duration"] intValue];
+    if (stay < 60) continue; // not render pin if too short
     lastLocation = curLoc;
     curLoc = [self addOneMarker:locDic];
   }
