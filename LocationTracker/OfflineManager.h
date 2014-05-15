@@ -51,6 +51,8 @@
 
 - (NSArray*) getTodayLocations;
 
+- (NSArray*) getLocationsHoursBefore:(int)hour;
+
 - (void) calDeltaInTimeSeries;
 
 - (void) updateTimeSeriesType:(NSString*) newType key:(NSString*) key;

@@ -608,15 +608,14 @@
   return dict;
 }
 
-- (NSArray*) getTodayLocations {
+- (NSArray*) getLocationsSince:(int)seconds {
   FMResultSet * r = nil;
   
   @synchronized(db) {
     [self initHistogramIfNoData];
-    NSDate* td = [ProxUtils getToday];
-    int start = [td timeIntervalSince1970];
+
     NSMutableArray * arr = [[NSMutableArray alloc] init];
-    r = [db executeQuery:[NSString stringWithFormat:TODAY_LOCATIONS, start]];
+    r = [db executeQuery:[NSString stringWithFormat:TODAY_LOCATIONS, seconds]];
     while ([r next]) {
       NSString* bucket = [r stringForColumn:@"bucket"];
       NSString * display = [r stringForColumn:@"display"];
@@ -633,7 +632,7 @@
       [addr setObject:time forKey:@"time"];
       [arr addObject:addr];
     }
-
+    
     if ([arr count] > 0) {
       NSMutableDictionary * lastRow = [arr lastObject];
       NSNumber * lastTime = [lastRow objectForKey:@"time"];
@@ -646,6 +645,17 @@
     }
   }
   return nil;
+}
+
+- (NSArray*) getLocationsHoursBefore:(int)hour {
+  NSTimeInterval start = [[NSDate date] timeIntervalSince1970] - hour * 3600;
+  return [self getLocationsSince:start];
+}
+
+- (NSArray*) getTodayLocations {
+  NSDate* td = [ProxUtils getToday];
+  int start = [td timeIntervalSince1970];
+  return [self getLocationsSince:start];
 }
 
 
