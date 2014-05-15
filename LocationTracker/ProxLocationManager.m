@@ -11,7 +11,7 @@
 #import "OfflineManager.h"
 #import "ProxUtils.h"
 
-  //static const int MAX_WALKING_SPEED = 3; // 3 meters/s
+static const int MAX_WALKING_SPEED = 3; // 3 meters/s
 
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
@@ -175,7 +175,7 @@
   NSNumber * nowNum = [NSNumber numberWithLong:now];
   NSNumber * speed = [NSNumber numberWithInt:curLoc.speed];
   [offlineMg setLoc:locStr type:@"raw_data" time:nowNum speed:speed];
-  if (![offlineMg isOffline]) {
+  if (![offlineMg isOffline] && curLoc.speed < MAX_WALKING_SPEED) {
     [self lookupLocation:loc updateTime:nowNum];
   }
   [offlineMg calDeltaInTimeSeries];
