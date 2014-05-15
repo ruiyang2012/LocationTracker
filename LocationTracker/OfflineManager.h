@@ -45,7 +45,7 @@
 
 - (void) setObjTypeNS:(NSString*) objTypeNs;
 
-- (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time;
+- (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time speed:(NSNumber*)speed;
 
 - (NSString*) getLongestOvernightLocation;
 
@@ -58,7 +58,7 @@
 - (NSArray*) getAllUnconfirmedGeo;
 - (NSArray*) getAllLocationCloseTo:(CLLocation*)cl radius:(double) radius;
 
-- (NSArray*) getLongestStayOfAllTime:(int) minStaySeconds;
+- (NSArray*) getLongestStayOfAllTime:(int) minStaySeconds limit:(int) limit;
 
 - (NSString *) getObjType:(NSString*) objTypeName;
 

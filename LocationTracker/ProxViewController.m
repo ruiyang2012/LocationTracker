@@ -106,7 +106,7 @@
 }
 
 - (void) updateMapFromTopLocations {
-  NSArray * allLocs = [offlineMg getLongestStayOfAllTime:300];
+  NSArray * allLocs = [offlineMg getLongestStayOfAllTime:300 limit:100];
   for (id bucket in allLocs) {
     [self addOneMarkerFromBucket:bucket];
   }

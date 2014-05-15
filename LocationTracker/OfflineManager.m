@@ -25,20 +25,22 @@
 #define PURGE_ALL @"delete from proxobj where deleted=1"
 #define UPD_PROOBJ_VALUE @"UPDATE proxobj set json='%@', user_id='%ld', created='%ld' where oid='%@';"
 #define CORRECT_USER_ID_MODIFIED @"UPDATE  proxobj set user_id = %ld where user_id=0;"
-#define DB_SCHEMA_VER @"1.2"
+#define DB_SCHEMA_VER @"1.3"
 #define FIND_MATCH_HISTOGRAM @"SELECT count(1) as c FROM histogram where bucket='%@'"
 #define INIT_HISTOGRAM @"INSERT INTO histogram (bucket) VALUES ('%@');"
 #define UPD_HISTOGRAM @"UPDATE histogram set sums=sums + %d where bucket='%@';"
-#define INSERT_TIME_SERIES @"INSERT INTO time_series_data (time, t_type, t_value) VALUES (?,?,?)"
+#define INSERT_TIME_SERIES @"INSERT INTO time_series_data (time, t_type, t_value, speed) VALUES (?,?,?,?)"
 #define GROUP_BY_LARGEST_TIME @"SELECT t_value, sum(delta) as s from time_series_data where t_type='apple_map' and  time > %d and time < %d group by t_value order by s desc limit 1"
 #define TODAY_LOCATIONS @"select bucket, display, sums, time, sum(delta) as d from histogram , time_series_data where t_value = bucket and time > %d  group by bucket  order by time"
 #define UPDATE_DELTA @"UPDATE time_series_data set delta= %d where time = %d"
 #define UPDATE_TIME_DATA_TYPE @"UPDATE time_series_data set t_type= '%@' where t_value = '%@'"
-#define GET_ALL_UNCONFIRMED_TIME @"select t_value, time from time_series_data where t_type='raw_data'"
+  // use max working speed 3 as filter
+#define GET_ALL_UNCONFIRMED_TIME @"select t_value, time from time_series_data where t_type='raw_data' and speed < 3"
 #define GET_ALL_AGGREGATE_TIME @"select t_value, sum(delta) as s from time_series_data where t_type='%@' and time >= %ld group by t_value"
 #define CAL_DELTA @"SELECT B.time, (A.time - B.time) as diff from time_series_data A INNER JOIN time_series_data B on A.ID > B.ID and A.t_type like 'raw_data%@' and B.t_type like 'raw_data%@'  and A.time > %ld group by A.ID"
+#define GET_LATEST_RAW_TIME @"select time, delta from time_series_data where t_type like 'raw_data%' order by time desc limit 1"
 #define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket, display from histogram"
-#define GET_TOP_HISTOGRAM @"select bucket, display from histogram where sums > %d order by sums desc limit %d"
+#define GET_TOP_HISTOGRAM @"select bucket, display, sums from histogram where sums > %d order by sums desc limit %d"
 #define UPD_HISTOGRAM_DISPLAY @"UPDATE histogram set display = '%@' where bucket = '%@'"
 
 @interface OfflineManager () {
@@ -458,9 +460,9 @@
 }
 
 
-- (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time {
+- (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time speed:(NSNumber*)speed {
   @synchronized(db) {
-    [db executeUpdate:INSERT_TIME_SERIES, time, type, loc];
+    [db executeUpdate:INSERT_TIME_SERIES, time, type, loc, speed];
      
   }
 }
@@ -507,6 +509,16 @@
       [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
       hasData = YES;
     }
+      // fix last record
+    r = [db executeQuery:GET_LATEST_RAW_TIME];
+    if ([r next]) {
+      int time = [r intForColumn:@"time"];
+      int delta = [r intForColumn:@"delta"];
+      int diff = now - time;
+      if (delta == 0) {
+        [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
+      }
+    }
     if (hasData) [self aggregateHistogram:@"apple_map" ts:lastTime];
   }
   if (hasData) [[NSUserDefaults standardUserDefaults] setInteger:now forKey:@"lastDeltaTimeStamp"];
@@ -543,10 +555,10 @@
   return result;
 }
 
-- (NSArray *) getLongestStayOfAllTime:(int) minStaySeconds{
+- (NSArray *) getLongestStayOfAllTime:(int) minStaySeconds limit:(int) limit{
   NSMutableArray * array = [[NSMutableArray alloc] init];
   @synchronized(db) {
-    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GET_TOP_HISTOGRAM, minStaySeconds, 20]];
+    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GET_TOP_HISTOGRAM, minStaySeconds, limit]];
     while ([r next]) {
       NSString* bucket = [r stringForColumn:@"bucket"];
       NSString* display = [r stringForColumn:@"display"];

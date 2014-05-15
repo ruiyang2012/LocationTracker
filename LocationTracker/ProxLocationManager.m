@@ -11,7 +11,7 @@
 #import "OfflineManager.h"
 #import "ProxUtils.h"
 
-static const int MAX_WALKING_SPEED = 3; // 3 meters/s
+  //static const int MAX_WALKING_SPEED = 3; // 3 meters/s
 
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
@@ -139,9 +139,9 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
   
   [locLogs addObject:locLog];
     //NSLog(@"New lat long: lat%f - lon%f", curLocation.coordinate.latitude, curLocation.coordinate.longitude);
-  if ([oldLocation speed] < MAX_WALKING_SPEED && [newLocation speed] < MAX_WALKING_SPEED) {
-    [self performSelectorInBackground:@selector(onLocUpd:) withObject:newLocation];
-  }
+    //if ([oldLocation speed] < MAX_WALKING_SPEED && [newLocation speed] < MAX_WALKING_SPEED) {
+  [self performSelectorInBackground:@selector(onLocUpd:) withObject:newLocation];
+    //}
   [self dispatchLocationChange:oldLocation to:newLocation duration:elapse];
 
   lastLocationUpdate = newTime;
@@ -170,10 +170,11 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
   if (offlineMg == nil) return;
   
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
-
-  NSString * locStr = [self locationToLatLonStr:loc];
+  CLLocation * curLoc = (CLLocation *) loc;
+  NSString * locStr = [self locationToLatLonStr:curLoc];
   NSNumber * nowNum = [NSNumber numberWithLong:now];
-  [offlineMg setLoc:locStr type:@"raw_data" time:nowNum];
+  NSNumber * speed = [NSNumber numberWithInt:curLoc.speed];
+  [offlineMg setLoc:locStr type:@"raw_data" time:nowNum speed:speed];
   if (![offlineMg isOffline]) {
     [self lookupLocation:loc updateTime:nowNum];
   }
@@ -191,7 +192,8 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
     [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"geoLookup" object:placemarks];
     for (CLPlacemark * pl in placemarks ) {
-      [offlineMg setLoc:[self placemarkToStr:pl] type:@"apple_map" time:updTime];
+      NSNumber * speed = [NSNumber numberWithInt:loc.speed];
+      [offlineMg setLoc:[self placemarkToStr:pl] type:@"apple_map" time:updTime speed:speed];
     }
     [offlineMg calDeltaInTimeSeries];
   }];
@@ -211,7 +213,7 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
 }
 
 - (void) checkRegionAndRule {
-  NSArray * regions = [offlineMg getLongestStayOfAllTime:300];
+  NSArray * regions = [offlineMg getLongestStayOfAllTime:300 limit:20];
   for (id regionStr in regions) {
     CLLocation * cl = [self locationStrToLoc:regionStr sep:@"|"];
     if (cl) {
