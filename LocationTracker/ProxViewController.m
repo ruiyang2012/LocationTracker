@@ -44,7 +44,7 @@
   NSNotificationCenter *notCenter = [NSNotificationCenter defaultCenter];
   [notCenter addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [notCenter addObserver:self selector:@selector(locationChange:) name:@"locationChange" object:nil];
-  [NSTimer scheduledTimerWithTimeInterval:60*5 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
+  [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
   
   
 }

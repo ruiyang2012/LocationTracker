@@ -32,7 +32,7 @@
 #define INSERT_TIME_SERIES @"INSERT INTO time_series_data (time, t_type, t_value, speed) VALUES (?,?,?,?)"
 #define GROUP_BY_LARGEST_TIME @"SELECT t_value, sum(delta) as s from time_series_data where t_type='apple_map' and  time > %d and time < %d group by t_value order by s desc limit 1"
 #define TODAY_LOCATIONS @"select bucket, display, sums, time, sum(delta) as d from histogram , time_series_data where t_value = bucket and time > %d  group by bucket  order by time"
-#define UPDATE_DELTA @"UPDATE time_series_data set delta= %d where time = %d"
+#define UPDATE_DELTA @"UPDATE time_series_data set delta= %ld where time = %ld"
 #define UPDATE_TIME_DATA_TYPE @"UPDATE time_series_data set t_type= '%@' where t_value = '%@'"
   // use max working speed 3 as filter
 #define GET_ALL_UNCONFIRMED_TIME @"select t_value, time from time_series_data where t_type='raw_data' and speed < 3"
@@ -496,6 +496,18 @@
   }
 }
 
+- (void) updateLastTimeSeries {
+    // fix last record
+  long now = [[NSDate date] timeIntervalSince1970];
+  FMResultSet * r = [db executeQuery:GET_LATEST_RAW_TIME];
+  if ([r next]) {
+    long time = [r longForColumn:@"time"];
+    long diff = now - time;
+    [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
+    
+  }
+}
+
 - (void) calDeltaInTimeSeries {
   long lastTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastDeltaTimeStamp"];
   long now = [[NSDate date] timeIntervalSince1970];
@@ -504,21 +516,12 @@
     FMResultSet * r = [db executeQuery:[NSString stringWithFormat:CAL_DELTA, @"%", @"%", lastTime]];
 
     while ([r next]) {
-      int time = [r intForColumn:@"time"];
-      int diff = [r intForColumn:@"diff"];
+      long time = [r longForColumn:@"time"];
+      long diff = [r longForColumn:@"diff"];
       [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
       hasData = YES;
     }
-      // fix last record
-    r = [db executeQuery:GET_LATEST_RAW_TIME];
-    if ([r next]) {
-      int time = [r intForColumn:@"time"];
-      int delta = [r intForColumn:@"delta"];
-      int diff = now - time;
-      if (delta == 0) {
-        [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
-      }
-    }
+    [self updateLastTimeSeries];
     if (hasData) [self aggregateHistogram:@"apple_map" ts:lastTime];
   }
   if (hasData) [[NSUserDefaults standardUserDefaults] setInteger:now forKey:@"lastDeltaTimeStamp"];
@@ -610,11 +613,12 @@
 
 - (NSArray*) getLocationsSince:(int)seconds {
   FMResultSet * r = nil;
-  
+  NSMutableArray * arr = [[NSMutableArray alloc] init];
   @synchronized(db) {
+    [self updateLastTimeSeries];
     [self initHistogramIfNoData];
 
-    NSMutableArray * arr = [[NSMutableArray alloc] init];
+
     r = [db executeQuery:[NSString stringWithFormat:TODAY_LOCATIONS, seconds]];
     while ([r next]) {
       NSString* bucket = [r stringForColumn:@"bucket"];
@@ -632,19 +636,8 @@
       [addr setObject:time forKey:@"time"];
       [arr addObject:addr];
     }
-    
-    if ([arr count] > 0) {
-      NSMutableDictionary * lastRow = [arr lastObject];
-      NSNumber * lastTime = [lastRow objectForKey:@"time"];
-      NSNumber * lastDelta = [lastRow objectForKey:@"duration"];
-      NSNumber * diff = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970] - [lastTime doubleValue]];
-      if (lastDelta < diff) {
-        [lastRow setObject:diff forKey:@"duration"];
-      }
-      return arr;
-    }
   }
-  return nil;
+  return arr;
 }
 
 - (NSArray*) getLocationsHoursBefore:(int)hour {
