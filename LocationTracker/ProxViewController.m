@@ -106,16 +106,16 @@
 }
 
 - (void) updateMapFromTopLocations {
-  NSArray * allLocs = [offlineMg getLongestStayOfAllTime:300 limit:100];
+  NSArray * allLocs = [offlineMg getLocationsHoursBefore:24 * 7 * 30];
   for (id bucket in allLocs) {
-    [self addOneMarkerFromBucket:bucket];
+    [self addOneMarker:bucket];
   }
 }
 
 - (void) updateMap{
   
     // iterate all histogram:
-  NSArray * todayLocations = [offlineMg getTodayLocations];
+  NSArray * todayLocations = [offlineMg getLocationsHoursBefore:24];
 
   CLLocation * lastLocation = nil;
   CLLocation * curLoc = nil;
