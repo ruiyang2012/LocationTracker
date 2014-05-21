@@ -14,6 +14,7 @@
 
 @implementation ProxGeoLookUp {
   NSDictionary *categories;
+  NSURLSession * session;
 }
 
 - (id) init {
@@ -27,6 +28,7 @@
                  @"Shop & Service": @"4d4b7105d754a06378d81259"
                  //@"Travel & Transport": @"4d4b7105d754a06379d81259"
                  };
+  session = [NSURLSession sharedSession];
   return self;
 }
 
@@ -48,28 +50,29 @@
   NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];
   NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?%@", queryString];
   NSURL *url = [[NSURL alloc] initWithString:urlString];
-  NSLog(@"%@", urlString);
+    //NSLog(@"%@", urlString);
   
-  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-
-  [NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-    if (error) {
-      NSLog(@"Failed to send invitation code request: %@", [error localizedDescription]);
-    } else {
-      NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-      if (httpResponse.statusCode != 200) {
-        NSLog(@"Failed to get response from server: %ld", (long)httpResponse.statusCode);
-      } else {
-        NSError *jsonError = nil;
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-        if (jsonError != nil) {
-          NSLog(@"Failed to retrieve json object for invitation code: %@", [jsonError localizedDescription]);
-        } else {
-          callback(json);
-        }
-      }
-    }
-  }];
+  [[session dataTaskWithURL:url
+            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+              if (error) {
+                NSLog(@"Failed to load four square result %@", [error localizedDescription]);
+              } else {
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+                if (httpResponse.statusCode != 200) {
+                  NSLog(@"Failed to get response from server: %ld", (long)httpResponse.statusCode);
+                } else {
+                  NSError *jsonError = nil;
+                  NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                  if (jsonError != nil) {
+                    NSLog(@"Failed to retrieve json object for invitation code: %@", [jsonError localizedDescription]);
+                  } else {
+                    callback(json);
+                  }
+                }
+              }
+              
+            }] resume];
+  
 }
 
 @end

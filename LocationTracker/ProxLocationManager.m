@@ -12,6 +12,7 @@
 #import "ProxUtils.h"
 
 static const int MAX_WALKING_SPEED = 3; // 3 meters/s
+static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?sensor=false&location_type=ROOFTOP&result_type=street_address&key=AIzaSyDk2hk_TQDAUus5uG9GZc-0EfypzMMe__0&latlng=";
 
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
@@ -24,7 +25,7 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
   NSMutableArray * locLogs;
   int elapse;
   CLRegion * lastRegion;
-
+  NSURLSession * session;
   NSTimeInterval regionEnterTime;
 }
 @end
@@ -44,6 +45,8 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
   if (![[NSUserDefaults standardUserDefaults] doubleForKey:@"firstLaunch"]) {
     [[NSUserDefaults standardUserDefaults] setDouble:lastLocationUpdate forKey:@"firstLaunch"];
   }
+  session = [NSURLSession sharedSession];
+  [self performSelector:@selector(netStatus:) withObject:nil afterDelay:0];
   return self;
 }
 
@@ -183,10 +186,41 @@ static const int MAX_WALKING_SPEED = 3; // 3 meters/s
   lastLocation = loc;
 }
 
+- (void) gapiLookup:(CLLocation*) loc updateTime:(NSNumber*) updTime {
+  NSString * gapi = [NSString stringWithFormat:@"%@%f,%f", GAPI_BASE_URL, loc.coordinate.latitude, loc.coordinate.longitude];
+  NSURL * url = [NSURL URLWithString:gapi];
+  [[session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    if (error) {
+        // nslog
+      return;
+    }
+    NSError * jsonError = nil;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    if (!json) return;
+    NSArray * array = json[@"results"];
+    NSDictionary * addr = [array firstObject];
+    if (!addr) return;
+    NSString * lat = [addr[@"geometry"][@"location"][@"lat"] stringValue];
+    NSString * lon = [addr[@"geometry"][@"location"][@"lng"] stringValue];
+    NSArray * a = [addr[@"formatted_address"] componentsSeparatedByString:@", "];
+    if ([a count] != 4) return;
+    NSArray * stateZip = [a[2] componentsSeparatedByString:@" "];
+    NSArray * locArr = @[lat, lon, a[0], a[0], a[1], stateZip[0], a[3], stateZip[1]];
+    NSString * locStr = [locArr componentsJoinedByString:@"|"];
+    [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
+    NSNumber * speed = [NSNumber numberWithInt:loc.speed];
+    [offlineMg setLoc:locStr type:@"apple_map" time:updTime speed:speed];
+    [offlineMg calDeltaInTimeSeries];
+  }] resume];
+  
+}
+
 - (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
+
   [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
     if (error || [placemarks count] ==0) {
       NSLog(@"location lookup error: %@ or no place", error);
+      [self gapiLookup:loc updateTime:updTime];
       return;
     }
     [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
