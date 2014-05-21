@@ -43,4 +43,11 @@
 
 + (NSDictionary *)queryStringToDictionary:(NSString *)queryString;
 + (NSString *)dictionaryToQueryString:(NSDictionary *)dictionary;
+
++ (NSData*) readBinary:(NSString*) fileName;
++ (NSString*) readText:(NSString*) fileName;
+
++ (void) writeText:(NSString*) fileName content:(NSString*) value;
++ (void) writeBinary:(NSString *) fileName content:(NSData*) value;
+
 @end

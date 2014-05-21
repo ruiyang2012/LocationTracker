@@ -16,7 +16,9 @@ static NSString * docRoot = nil;
 @implementation ProxUtils
 
 + (BOOL) isEmptyString:(NSString*)v {
-  return (v == nil || v == NULL || [v isEqual:NSNull.null]  || [v length] == 0);
+  const id nul = [NSNull null];
+  if (v == nil || v == NULL || v == nul || ![v isKindOfClass:[NSString class]]) return YES;
+  return ([v length] == 0);
 }
 
 
@@ -320,6 +322,41 @@ static NSString * docRoot = nil;
   }
   
   return docRoot;
+}
+
++ (NSString*) getFullPath:(NSString*) fileName {
+  NSString * docRoot = [ProxUtils getDocumentRootPath];
+  NSString * path = [docRoot stringByAppendingPathComponent:fileName];
+  return path;
+}
+
++ (NSData*) readBinary:(NSString*) fileName {
+  NSString * path = [ProxUtils getFullPath:fileName];
+  NSData * d = [NSData dataWithContentsOfFile:path];
+  return d;
+}
+
++ (NSString*) readText:(NSString*) fileName {
+  NSString * path = [ProxUtils getFullPath:fileName];
+  NSError * theError;
+  NSString * v = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&theError];
+  if (theError) {
+    return nil;
+  }
+  NSString * result = [v stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  return [result length] == 0 ? nil : result;
+}
+
++ (void) writeText:(NSString*) fileName content:(NSString*) value {
+  NSString * path = [ProxUtils getFullPath:fileName];
+  NSError *theError;
+  NSString * v = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  [v writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&theError];
+}
+
++ (void) writeBinary:(NSString *) fileName content:(NSData*) value {
+  NSString * path = [ProxUtils getFullPath:fileName];
+  [value writeToFile:path atomically:YES];
 }
 
 @end
