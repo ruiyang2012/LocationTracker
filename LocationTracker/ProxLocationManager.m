@@ -129,6 +129,10 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 }
 
+- (NSTimeInterval) getElapseSinceLastLocationChange {
+  return [[NSDate date] timeIntervalSince1970] - lastLocationUpdate;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
     //NSLog(@"Speed is %f -- %f", oldLocation.speed, newLocation.speed);

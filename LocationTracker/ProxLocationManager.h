@@ -18,4 +18,7 @@
 -(id) getCurLoc;
 
 - (void) checkRegionAndRule;
+
+- (NSTimeInterval) getElapseSinceLastLocationChange;
+
 @end
