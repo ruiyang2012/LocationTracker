@@ -204,8 +204,10 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     NSString * lon = [addr[@"geometry"][@"location"][@"lng"] stringValue];
     NSArray * a = [addr[@"formatted_address"] componentsSeparatedByString:@", "];
     if ([a count] != 4) return;
+    NSArray * street = addr[@"address_components"];
     NSArray * stateZip = [a[2] componentsSeparatedByString:@" "];
-    NSArray * locArr = @[lat, lon, a[0], a[0], a[1], stateZip[0], a[3], stateZip[1]];
+    NSString * name = ([street count] > 2) ? street[1][@"short_name"] : [street firstObject][@"short_name"];
+    NSArray * locArr = @[lat, lon, name, a[0], a[1], stateZip[0], a[3], stateZip[1]];
     NSString * locStr = [locArr componentsJoinedByString:@"|"];
     [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
     NSNumber * speed = [NSNumber numberWithInt:loc.speed];
@@ -216,7 +218,6 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 }
 
 - (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
-
   [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
     if (error || [placemarks count] ==0) {
       NSLog(@"location lookup error: %@ or no place", error);
