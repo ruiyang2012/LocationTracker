@@ -45,7 +45,7 @@
   parameters[@"limit"] = @"4";
   parameters[@"v"] = @"20140418";
   parameters[@"radius"] = @"100";
-  parameters[@"categoryId"] = [self foursquareCategories];
+    //parameters[@"categoryId"] = [self foursquareCategories];
   
   NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];
   NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?%@", queryString];

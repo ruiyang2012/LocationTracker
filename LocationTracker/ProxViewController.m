@@ -130,7 +130,7 @@
     radius = latestDistance * 1.5;
     NSLog(@"adjusted radius is %d", radius);
   }
-  if (curLoc) { [self centerAtLocation:curLoc.coordinate]; }
+    if (curLoc && !isCenteredOnce) { [self centerAtLocation:curLoc.coordinate]; }
   
 
 }
@@ -148,9 +148,7 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-  if (!isCenteredOnce) {
-    [self centerAtLocation:userLocation.coordinate];
-  }
+  [self centerAtLocation:userLocation.coordinate];
   isCenteredOnce = YES;
 
 }
