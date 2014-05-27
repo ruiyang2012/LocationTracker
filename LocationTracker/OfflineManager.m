@@ -42,6 +42,7 @@
 #define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket, display from histogram"
 #define GET_TOP_HISTOGRAM @"select bucket, display, sums from histogram where sums > %d order by sums desc limit %d"
 #define UPD_HISTOGRAM_DISPLAY @"UPDATE histogram set display = '%@' where bucket = '%@'"
+#define CLEAN_OLD_TS @"delete from time_series_data where delta < 600 and time < %ld"
 
 @interface OfflineManager () {
   NSString *databasePath;
@@ -511,8 +512,10 @@
 - (void) calDeltaInTimeSeries {
   long lastTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastDeltaTimeStamp"];
   long now = [[NSDate date] timeIntervalSince1970];
+  long aMonthAgo = now - 3600 * 24 * 30;
   BOOL hasData = NO;
   @synchronized(db) {
+    [db executeUpdate:[NSString stringWithFormat:CLEAN_OLD_TS, aMonthAgo]];
     FMResultSet * r = [db executeQuery:[NSString stringWithFormat:CAL_DELTA, @"%", @"%", lastTime]];
 
     while ([r next]) {
