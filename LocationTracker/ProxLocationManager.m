@@ -254,6 +254,10 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
       }
     }
     if ([ProxUtils isEmptyString:city]) city = locality;
+    if ([ProxUtils isEmptyString:city] || [ProxUtils isEmptyString:name]) {
+      [self gapiLookup:loc updateTime:updTime];
+      return;
+    }
     street = [NSString stringWithFormat:@"%@ %@", streetNo, name];
     NSArray * locArr = @[lat, lon, name, street, city, state, cc, zip];
     NSString * locStr = [locArr componentsJoinedByString:@"|"];
