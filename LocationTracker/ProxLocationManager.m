@@ -225,12 +225,37 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     if (!addr) return;
     NSString * lat = [addr[@"geometry"][@"location"][@"lat"] stringValue];
     NSString * lon = [addr[@"geometry"][@"location"][@"lng"] stringValue];
-    NSArray * a = [addr[@"formatted_address"] componentsSeparatedByString:@", "];
-    if ([a count] != 4) return;
-    NSArray * street = addr[@"address_components"];
-    NSArray * stateZip = [a[2] componentsSeparatedByString:@" "];
-    NSString * name = ([street count] > 2) ? street[1][@"short_name"] : [street firstObject][@"short_name"];
-    NSArray * locArr = @[lat, lon, name, a[0], a[1], stateZip[0], a[3], stateZip[1]];
+    NSArray * addrComponents = addr[@"address_components"];
+    NSString * streetNo = @"";
+    NSString * street = @"";
+    NSString * locality = @"";
+    NSString * city = @"";
+    NSString * state = @"";
+    NSString * cc = @"";
+    NSString * zip = @"";
+    NSString * name = @"";
+    
+    for (id c in addrComponents) {
+      NSArray * addrType = c[@"types"];
+      if ([addrType containsObject:@"street_number"]) {
+        streetNo = c[@"short_name"];
+      } else if ([addrType containsObject:@"route"]) {
+        name = c[@"short_name"];
+      } else if ([addrType containsObject:@"locality"]) {
+        locality = c[@"short_name"];
+      } else if ([addrType containsObject:@"administrative_area_level_3"]) {
+        city = c[@"short_name"];
+      } else if ([addrType containsObject:@"administrative_area_level_1"]) {
+        state = c[@"short_name"];
+      } else if ([addrType containsObject:@"country"]) {
+        cc = c[@"short_name"];
+      }  else if ([addrType containsObject:@"postal_code"]) {
+        zip = c[@"short_name"];
+      }
+    }
+    if ([ProxUtils isEmptyString:city]) city = locality;
+    street = [NSString stringWithFormat:@"%@ %@", streetNo, name];
+    NSArray * locArr = @[lat, lon, name, street, city, state, cc, zip];
     NSString * locStr = [locArr componentsJoinedByString:@"|"];
     [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
     NSNumber * speed = [NSNumber numberWithInt:loc.speed];
