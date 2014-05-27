@@ -19,6 +19,7 @@
   BOOL isCenteredOnce;
   NSMutableDictionary * pins;
   BOOL forceAddMarker;
+  CLLocation* lastCenteredCord;
 }
 
 @end
@@ -45,8 +46,6 @@
   [notCenter addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [notCenter addObserver:self selector:@selector(locationChange:) name:@"locationChange" object:nil];
   [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
-  
-  
 }
 
 - (IBAction) toggleToday:(UIBarButtonItem*)sender {
@@ -148,9 +147,11 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-  [self centerAtLocation:userLocation.coordinate];
-  isCenteredOnce = YES;
-
+  if (lastCenteredCord == nil || [lastCenteredCord distanceFromLocation:userLocation.location] > 100) {
+    [self centerAtLocation:userLocation.coordinate];
+    isCenteredOnce = YES;
+  }
+  lastCenteredCord = userLocation.location;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
