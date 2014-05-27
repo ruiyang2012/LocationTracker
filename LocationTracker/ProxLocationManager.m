@@ -64,8 +64,8 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   locMan.delegate = self;
   locMan.distanceFilter = kCLDistanceFilterNone;
   locMan.desiredAccuracy = kCLLocationAccuracyBest;
-  [locMan startMonitoringSignificantLocationChanges];
-    //[locMan startUpdatingLocation];
+    //[locMan startMonitoringSignificantLocationChanges];
+  [locMan startUpdatingLocation];
 }
 
 - (CLLocation *) locationStrToLoc:(NSString *) locStr sep:(NSString*)sep{
@@ -135,7 +135,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
-    //NSLog(@"Speed is %f -- %f", oldLocation.speed, newLocation.speed);
+  NSLog(@"Speed is %f -- %f", oldLocation.speed, newLocation.speed);
 
   curLocation = newLocation;
   NSTimeInterval newTime = [[NSDate date] timeIntervalSince1970];

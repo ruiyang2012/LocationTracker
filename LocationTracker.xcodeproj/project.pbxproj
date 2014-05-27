@@ -265,6 +265,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Linc;
 				TargetAttributes = {
+					241AA6FF192044AA00150304 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					241AA723192044AA00150304 = {
 						TestTargetID = 241AA6FF192044AA00150304;
 					};
