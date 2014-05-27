@@ -192,11 +192,29 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 }
 
 - (void) gapiLookup:(CLLocation*) loc updateTime:(NSNumber*) updTime {
+  [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
+    if (error || [placemarks count] ==0) {
+      NSLog(@"location lookup error: %@ or no place", error);
+      return;
+    }
+    [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"geoLookup" object:placemarks];
+    for (CLPlacemark * pl in placemarks ) {
+      NSNumber * speed = [NSNumber numberWithInt:loc.speed];
+      [offlineMg setLoc:[self placemarkToStr:pl] type:@"apple_map" time:updTime speed:speed];
+    }
+    [offlineMg calDeltaInTimeSeries];
+  }];
+  
+}
+
+- (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
   NSString * gapi = [NSString stringWithFormat:@"%@%f,%f", GAPI_BASE_URL, loc.coordinate.latitude, loc.coordinate.longitude];
   NSURL * url = [NSURL URLWithString:gapi];
   [[session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
     if (error) {
         // nslog
+      [self gapiLookup:loc updateTime:updTime];
       return;
     }
     NSError * jsonError = nil;
@@ -220,23 +238,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     [offlineMg calDeltaInTimeSeries];
   }] resume];
   
-}
 
-- (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
-  [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
-    if (error || [placemarks count] ==0) {
-      NSLog(@"location lookup error: %@ or no place", error);
-      [self gapiLookup:loc updateTime:updTime];
-      return;
-    }
-    [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"geoLookup" object:placemarks];
-    for (CLPlacemark * pl in placemarks ) {
-      NSNumber * speed = [NSNumber numberWithInt:loc.speed];
-      [offlineMg setLoc:[self placemarkToStr:pl] type:@"apple_map" time:updTime speed:speed];
-    }
-    [offlineMg calDeltaInTimeSeries];
-  }];
 }
 
 - (BOOL) isCloseToHome {
