@@ -42,7 +42,7 @@
 #define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket, display from histogram"
 #define GET_TOP_HISTOGRAM @"select bucket, display, sums from histogram where sums > %d order by sums desc limit %d"
 #define UPD_HISTOGRAM_DISPLAY @"UPDATE histogram set display = '%@' where bucket = '%@'"
-#define CLEAN_OLD_TS @"delete from time_series_data where delta < 600 and time < %ld"
+#define CLEAN_OLD_TS @"delete from time_series_data where (delta < 600 or t_type = 'apple_map') and time < %ld"
 
 @interface OfflineManager () {
   NSString *databasePath;
