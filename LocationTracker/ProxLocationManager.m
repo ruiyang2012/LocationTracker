@@ -176,27 +176,25 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   double firstLaunch = [[NSUserDefaults standardUserDefaults] doubleForKey:@"firstLaunch"];
   NSDate * firstLaunchDate = [NSDate dateWithTimeIntervalSince1970:firstLaunch];
   NSInteger daysElapse = [ProxUtils daysBetween:firstLaunchDate to:[NSDate date]];
-  if (daysElapse > 0) {
-    NSString * homeStr = [offlineMg getLongestOvernightLocation];
-    if (homeStr) {
-      NSNumber * homeCnt = [homeDict objectForKey:homeStr];
-      if (!homeCnt) homeCnt = @(0);
-      homeCnt = [NSNumber numberWithInt:1 + [homeCnt intValue]];
-      [homeDict setObject:homeCnt forKey:homeStr];
-        // find largest number.
-      int maxCnt = 0;
-      for (NSString * k in homeDict) {
-        NSNumber * v = [homeDict objectForKey:k];
-        if (maxCnt < [v intValue]) {
-          homeStr = k;
-          maxCnt = [v intValue];
-        }
-      }
-      [[NSUserDefaults standardUserDefaults] setObject:homeStr forKey:@"homeLocation"];
+  NSString * homeStr = [offlineMg getLongestOvernightLocation];
+    // short cut here.
+  if (daysElapse <= 0 || !homeStr) { return; }
+  NSNumber * homeCnt = [homeDict objectForKey:homeStr];
+  if (!homeCnt) homeCnt = @(0);
+  homeCnt = [NSNumber numberWithInt:1 + [homeCnt intValue]];
+  [homeDict setObject:homeCnt forKey:homeStr];
+    // find largest number.
+  int maxCnt = 0;
+  for (NSString * k in homeDict) {
+    NSNumber * v = [homeDict objectForKey:k];
+    if (maxCnt < [v intValue]) {
+      homeStr = k;
+      maxCnt = [v intValue];
     }
-    if (homeStr) homeLocation = [self locationStrToLoc:homeStr sep:@","];
   }
-  
+  [[NSUserDefaults standardUserDefaults] setObject:homeStr forKey:@"homeLocation"];
+
+  homeLocation = [self locationStrToLoc:homeStr sep:@","];
 }
 
 - (void) addLocation:(id) loc {
