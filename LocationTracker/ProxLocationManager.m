@@ -44,7 +44,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   [self setupLocationManager];
   NSString * homeLocStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"homeLocation"];
   homeLocation = [self locationStrToLoc:homeLocStr sep:@","];
-  [homeDict setObject:@(1) forKey:homeLocStr];
+  if (homeLocStr) [homeDict setObject:@(1) forKey:homeLocStr];
   if (![[NSUserDefaults standardUserDefaults] doubleForKey:@"firstLaunch"]) {
     [[NSUserDefaults standardUserDefaults] setDouble:lastLocationUpdate forKey:@"firstLaunch"];
   }
