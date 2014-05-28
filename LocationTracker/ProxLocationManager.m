@@ -135,7 +135,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
-  if (oldLocation && newLocation && [newLocation distanceFromLocation:oldLocation] < 20) return;
+  if (oldLocation && newLocation && [newLocation distanceFromLocation:oldLocation] < 20 && newLocation.speed > 0) return;
   NSLog(@"Speed is %f -- %f", oldLocation.speed, newLocation.speed);
 
   curLocation = newLocation;
