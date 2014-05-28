@@ -37,7 +37,9 @@
   forceAddMarker = NO;
 
   UIBarButtonItem * flipBtn = [[UIBarButtonItem alloc] initWithTitle:@"All" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleToday:)];
+  UIBarButtonItem * leftBtn = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleHome:)];
   self.navigationItem.rightBarButtonItem = flipBtn;
+  self.navigationItem.leftBarButtonItem = leftBtn;
   pins = [[NSMutableDictionary alloc] init];
 	// Do any additional setup after loading the view, typically from a nib.
   self.mapView.delegate = self;
@@ -48,7 +50,20 @@
   [notCenter addObserver:self selector:@selector(locationChange:) name:@"locationChange" object:nil];
   [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
   homePin = [[MKPointAnnotation alloc] init];
-  homePin.title = @"Title";
+  homePin.title = @"Home";
+}
+
+- (IBAction) toggleHome:(UIBarButtonItem*)sender {
+  if ([mapView.annotations containsObject:homePin]) {
+    [mapView removeAnnotation:homePin];
+  } else {
+    CLLocation * homeLoc = [locMg getHomeLocation];
+    if (homeLoc) {
+      homePin.coordinate = homeLoc.coordinate;
+      [mapView addAnnotation:homePin];
+      [self centerAtLocation:homePin.coordinate];
+    }
+  }
 }
 
 - (IBAction) toggleToday:(UIBarButtonItem*)sender {
@@ -133,12 +148,6 @@
     NSLog(@"adjusted radius is %d", radius);
   }
   if (curLoc && !isCenteredOnce) { [self centerAtLocation:curLoc.coordinate]; }
-  
-  if ([locMg getHomeLocation]) {
-    homePin.coordinate = [locMg getHomeLocation].coordinate;
-    [mapView removeAnnotation:homePin];
-    [mapView addAnnotation:homePin];
-  }
 
 }
 
