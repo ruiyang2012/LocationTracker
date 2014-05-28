@@ -65,7 +65,7 @@
   [actionSheet showInView:inView];
 }
 
-- (void) show4Squre {
+- (void) show4Square {
   __weak LincAnnotation * weakSelf = self;
   dispatch_async(dispatch_get_main_queue(), ^{
     NSString * subTitle = [NSString stringWithFormat:@"Possible @ %@ for %d mins", [self.locationDict objectForKey:@"street"], stay];
@@ -115,12 +115,12 @@
     [_mapView addAnnotation:self];
   } else {
     if (fourSqureResult) {
-      [self show4Squre];
+      [self show4Square];
     } else {
-      [geoTool fourSquareLookup:self.coordinate done:^(NSDictionary *info) {
+      [geoTool fourSquareLookup:self.coordinate filterByCategory:NO done:^(NSDictionary *info) {
           //NSLog(@"four square result: %@", info);
         fourSqureResult = info;
-        [self show4Squre];
+        [self show4Square];
       }];
     }
   }

@@ -13,6 +13,6 @@ typedef void (^PROX_GEO_CALLBACK)(NSDictionary* info);
 
 @interface ProxGeoLookUp : NSObject
 
-- (void) fourSquareLookup:(CLLocationCoordinate2D) coord done:(PROX_GEO_CALLBACK) callback;
+- (void) fourSquareLookup:(CLLocationCoordinate2D) coord filterByCategory:(BOOL) fbc done:(PROX_GEO_CALLBACK) callback;
 
 @end

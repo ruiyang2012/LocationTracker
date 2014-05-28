@@ -36,7 +36,7 @@
   return [[categories allValues] componentsJoinedByString:@","];
 }
 
-- (void) fourSquareLookup:(CLLocationCoordinate2D) coord done:(PROX_GEO_CALLBACK) callback {
+- (void) fourSquareLookup:(CLLocationCoordinate2D) coord filterByCategory:(BOOL) fbc done:(PROX_GEO_CALLBACK) callback {
   NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
   parameters[@"client_id"] = FOURSQUARE_CLIENT_ID;
   parameters[@"client_secret"]= FOURSQUARE_CLIENT_SECRET;
@@ -45,7 +45,7 @@
   parameters[@"limit"] = @"4";
   parameters[@"v"] = @"20140418";
   parameters[@"radius"] = @"100";
-    //parameters[@"categoryId"] = [self foursquareCategories];
+  if (fbc) parameters[@"categoryId"] = [self foursquareCategories];
   
   NSString *queryString = [ProxUtils dictionaryToQueryString:parameters];
   NSString *urlString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/search?%@", queryString];
