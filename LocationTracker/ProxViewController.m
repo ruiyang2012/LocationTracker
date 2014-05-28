@@ -20,6 +20,7 @@
   NSMutableDictionary * pins;
   BOOL forceAddMarker;
   CLLocation* lastCenteredCord;
+  MKPointAnnotation * homePin;
 }
 
 @end
@@ -46,6 +47,8 @@
   [notCenter addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [notCenter addObserver:self selector:@selector(locationChange:) name:@"locationChange" object:nil];
   [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
+  homePin = [[MKPointAnnotation alloc] init];
+  homePin.title = @"Title";
 }
 
 - (IBAction) toggleToday:(UIBarButtonItem*)sender {
@@ -129,8 +132,13 @@
     radius = latestDistance * 1.5;
     NSLog(@"adjusted radius is %d", radius);
   }
-    if (curLoc && !isCenteredOnce) { [self centerAtLocation:curLoc.coordinate]; }
+  if (curLoc && !isCenteredOnce) { [self centerAtLocation:curLoc.coordinate]; }
   
+  if ([locMg getHomeLocation]) {
+    homePin.coordinate = [locMg getHomeLocation].coordinate;
+    [mapView removeAnnotation:homePin];
+    [mapView addAnnotation:homePin];
+  }
 
 }
 
