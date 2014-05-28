@@ -21,4 +21,6 @@
 
 - (NSTimeInterval) getElapseSinceLastLocationChange;
 
+- (CLLocation *) getHomeLocation;
+
 @end

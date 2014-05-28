@@ -27,6 +27,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   CLRegion * lastRegion;
   NSURLSession * session;
   NSTimeInterval regionEnterTime;
+  NSMutableDictionary * homeDict;
 }
 @end
 
@@ -37,6 +38,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   offlineMg = offlineManger;
   geocoder = [[CLGeocoder alloc] init];
   regionEnterTime = lastLocationUpdate = [[NSDate date] timeIntervalSince1970];
+  homeDict = [[NSMutableDictionary alloc] init];
   locLogs = [[NSMutableArray alloc] init];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netStatus:) name:@"ProxOfflineStatusChange" object:nil];
   [self setupLocationManager];
@@ -159,6 +161,10 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   return curLocation;
 }
 
+- (CLLocation *) getHomeLocation {
+  return [homeLocation copy];
+}
+
 - (void) onLocUpd:(CLLocation*) loc {
   
   [self addLocation:loc];
@@ -168,7 +174,22 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   NSInteger daysElapse = [ProxUtils daysBetween:firstLaunchDate to:[NSDate date]];
   if (daysElapse > 0) {
     NSString * homeStr = [offlineMg getLongestOvernightLocation];
-    if (homeStr) [[NSUserDefaults standardUserDefaults] setObject:homeStr forKey:@"homeLocation"];
+    if (homeStr) {
+      NSNumber * homeCnt = [homeDict objectForKey:homeStr];
+      if (!homeCnt) homeCnt = @(0);
+      homeCnt = [NSNumber numberWithInt:1 + [homeCnt intValue]];
+      [homeDict setObject:homeCnt forKey:homeStr];
+        // find largest number.
+      int maxCnt = 0;
+      for (NSString * k in homeDict) {
+        NSNumber * v = [homeDict objectForKey:k];
+        if (maxCnt < [v intValue]) {
+          homeStr = k;
+          maxCnt = [v intValue];
+        }
+      }
+      [[NSUserDefaults standardUserDefaults] setObject:homeStr forKey:@"homeLocation"];
+    }
     homeLocation = [self locationStrToLoc:homeStr sep:@","];
   }
   
