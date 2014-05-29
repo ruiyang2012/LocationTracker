@@ -73,14 +73,20 @@
   databasePath = [documentDir stringByAppendingPathComponent:DB_NAME];
   
   [self createAndCheckDatabase];
-  db = [FMDatabase databaseWithPath:databasePath];
-  [self openDB];
+  db = nil;
+
   weakSelf = self;
   _userId = 0;
   dateFormatter = [[NSDateFormatter alloc] init] ;
   dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
   [self performSelector:@selector(notifyNetworkStatus) withObject:nil afterDelay:0];
+  [self performSelector:@selector(setupDB) withObject:nil afterDelay:1];
   return self;
+}
+
+- (void) setupDB {
+  db = [FMDatabase databaseWithPath:databasePath];
+  [self openDB];
 }
 
 - (void) notifyNetworkStatus {
@@ -510,6 +516,7 @@
 }
 
 - (void) calDeltaInTimeSeries {
+  if (db == nil) return;
   long lastTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastDeltaTimeStamp"];
   long now = [[NSDate date] timeIntervalSince1970];
   long aMonthAgo = now - 3600 * 24 * 30;
@@ -539,7 +546,7 @@
     int end = start + 3600 * 14;
     r = [db executeQuery:[NSString stringWithFormat:GROUP_BY_LARGEST_TIME, start, end]];
     if ([r next]) {
-      NSString* bucket = [r stringForColumn:@"bucket"];
+      NSString* bucket = [r stringForColumn:@"t_value"];
       NSArray * array = [bucket componentsSeparatedByString:@"|"];
       if (array) return [NSString stringWithFormat: @"%@,%@", array[0], array[1]];
     }
