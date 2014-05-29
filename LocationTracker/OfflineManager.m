@@ -80,7 +80,7 @@
   dateFormatter = [[NSDateFormatter alloc] init] ;
   dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
   [self performSelector:@selector(notifyNetworkStatus) withObject:nil afterDelay:0];
-  [self performSelector:@selector(setupDB) withObject:nil afterDelay:1];
+  [self performSelector:@selector(setupDB) withObject:nil afterDelay:0];
   return self;
 }
 
