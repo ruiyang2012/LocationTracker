@@ -31,6 +31,7 @@
 		241AA75419204A6C00150304 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75319204A6C00150304 /* Reachability.m */; };
 		241AA75719204A7C00150304 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75619204A7C00150304 /* NSData+Base64.m */; };
 		241AA75A19204A8E00150304 /* ProxLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 241AA75919204A8E00150304 /* ProxLocationManager.m */; };
+		241BDFB31937EA2200EBD55F /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 241BDFB21937EA2200EBD55F /* FMDatabasePool.m */; };
 		249233F919213645002AED31 /* prox.db in Resources */ = {isa = PBXBuildFile; fileRef = 241AA75B1920656B00150304 /* prox.db */; };
 		249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 249233FB19218A40002AED31 /* ProxGeoLookUp.m */; };
 		24DF582D1921D14100E7651F /* OfflineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DF582C1921D14100E7651F /* OfflineManager.m */; };
@@ -85,6 +86,8 @@
 		241AA75819204A8E00150304 /* ProxLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxLocationManager.h; sourceTree = "<group>"; };
 		241AA75919204A8E00150304 /* ProxLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxLocationManager.m; sourceTree = "<group>"; };
 		241AA75B1920656B00150304 /* prox.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = prox.db; sourceTree = "<group>"; };
+		241BDFB11937EA2200EBD55F /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		241BDFB21937EA2200EBD55F /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		249233FA19218A40002AED31 /* ProxGeoLookUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProxGeoLookUp.h; sourceTree = "<group>"; };
 		249233FB19218A40002AED31 /* ProxGeoLookUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProxGeoLookUp.m; sourceTree = "<group>"; };
 		24DF582B1921D14100E7651F /* OfflineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OfflineManager.h; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 		241AA709192044AA00150304 /* LocationTracker */ = {
 			isa = PBXGroup;
 			children = (
+				241BDFB11937EA2200EBD55F /* FMDatabasePool.h */,
+				241BDFB21937EA2200EBD55F /* FMDatabasePool.m */,
 				24DF582B1921D14100E7651F /* OfflineManager.h */,
 				24DF582C1921D14100E7651F /* OfflineManager.m */,
 				241AA75519204A7C00150304 /* NSData+Base64.h */,
@@ -326,6 +331,7 @@
 			files = (
 				24DF583319229E0C00E7651F /* LincAnnotation.m in Sources */,
 				249233FC19218A40002AED31 /* ProxGeoLookUp.m in Sources */,
+				241BDFB31937EA2200EBD55F /* FMDatabasePool.m in Sources */,
 				24DF582D1921D14100E7651F /* OfflineManager.m in Sources */,
 				241AA710192044AA00150304 /* main.m in Sources */,
 				241AA75119204A6100150304 /* ProxUtils.m in Sources */,
