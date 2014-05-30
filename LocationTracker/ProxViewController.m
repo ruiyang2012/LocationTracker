@@ -96,8 +96,7 @@
 
 - (CLLocation*) addOneMarker:(NSDictionary*) locDic {
   NSString* bucket = [locDic objectForKey:@"bucket"];
-  int dur = [[locDic objectForKey:@"duration"] intValue];
-  if (dur < 60 * 8) return nil;
+
   LincAnnotation * pin =[pins objectForKey:bucket];
   if (pin) {
     if (forceAddMarker) [self.mapView addAnnotation:pin];
@@ -126,6 +125,8 @@
 - (void) updateMapFromTopLocations {
   NSArray * allLocs = [offlineMg getLocationsHoursBefore:24 * 7 * 30];
   for (id bucket in allLocs) {
+    int stay = [[bucket objectForKey:@"duration"] intValue];
+    if (stay < 60 * 5) continue; // not render pin if too short
     [self addOneMarker:bucket];
   }
 }
@@ -139,7 +140,7 @@
   CLLocation * curLoc = nil;
   for (id locDic in todayLocations) {
     int stay = [[locDic objectForKey:@"duration"] intValue];
-    if (stay < 60) continue; // not render pin if too short
+    if (stay < 60 * 5) continue; // not render pin if too short
     CLLocation * l = [self addOneMarker:locDic];
     if (l) {
       lastLocation = curLoc;
