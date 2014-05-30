@@ -54,6 +54,7 @@
   NSInteger _userId;
   NSDateFormatter * dateFormatter;
   NSString* _objTypeNs;
+  BOOL hasBackgroundDeltaJob;
 }
 
 @end
@@ -75,6 +76,7 @@
   
   [self createAndCheckDatabase];
   db = nil;
+  hasBackgroundDeltaJob = NO;
 
   weakSelf = self;
   _userId = 0;
@@ -524,9 +526,13 @@
   long lastTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastDeltaTimeStamp"];
   long now = [[NSDate date] timeIntervalSince1970];
   if (now - lastTime < 10) {
-    [self performSelector:@selector(calDeltaInTimeSeries) withObject:nil afterDelay:10];
+    if (!hasBackgroundDeltaJob) {
+      [self performSelector:@selector(calDeltaInTimeSeries) withObject:nil afterDelay:10];
+      hasBackgroundDeltaJob = YES;
+    }
     return;
   }
+  hasBackgroundDeltaJob = NO;
   long aMonthAgo = now - 3600 * 24 * 30;
   BOOL hasData = NO;
   @synchronized(db) {
