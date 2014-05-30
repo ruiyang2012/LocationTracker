@@ -29,6 +29,7 @@
 #define FIND_MATCH_HISTOGRAM @"SELECT count(1) as c FROM histogram where bucket='%@'"
 #define INIT_HISTOGRAM @"INSERT INTO histogram (bucket) VALUES ('%@');"
 #define UPD_HISTOGRAM @"UPDATE histogram set sums=sums + %d where bucket='%@';"
+#define COUNT_TS_FOR_TS @"select count(1) as c from time_series_data where time='%ld' and t_type='%@' "
 #define INSERT_TIME_SERIES @"INSERT INTO time_series_data (time, t_type, t_value, speed) VALUES (?,?,?,?)"
 #define GROUP_BY_LARGEST_TIME @"SELECT t_value, sum(delta) as s from time_series_data where t_type='apple_map' and  time > %d and time < %d group by t_value order by s desc limit 1"
 #define TODAY_LOCATIONS @"select bucket, display, sums, time, sum(delta) as d from histogram , time_series_data where t_value = bucket and time > %d  group by bucket  order by time"
@@ -469,8 +470,11 @@
 
 - (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time speed:(NSNumber*)speed {
   @synchronized(db) {
-    [db executeUpdate:INSERT_TIME_SERIES, time, type, loc, speed];
-     
+    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:COUNT_TS_FOR_TS, [time longValue], type]];
+    int rowCount =  0;
+    if ([r next]) { rowCount = [r intForColumn:@"c"]; }
+    if (rowCount == 0) [db executeUpdate:INSERT_TIME_SERIES, time, type, loc, speed];
+    
   }
 }
 
@@ -519,6 +523,10 @@
   if (db == nil) return;
   long lastTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastDeltaTimeStamp"];
   long now = [[NSDate date] timeIntervalSince1970];
+  if (now - lastTime < 10) {
+    [self performSelector:@selector(calDeltaInTimeSeries) withObject:nil afterDelay:10];
+    return;
+  }
   long aMonthAgo = now - 3600 * 24 * 30;
   BOOL hasData = NO;
   @synchronized(db) {
