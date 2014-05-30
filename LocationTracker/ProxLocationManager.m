@@ -142,11 +142,13 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   if (curLocation && newLocation) {
     if (dist == 0 || (dist < 20 && newLocation.speed > 0)) return;
   }
-  NSLog(@"Speed is %f -- %f -- %ld", curLocation.speed, newLocation.speed, dist);
-
-  curLocation = newLocation;
   NSTimeInterval newTime = [[NSDate date] timeIntervalSince1970];
   elapse = (int) (newTime - lastLocationUpdate);
+  if (elapse < 10 && dist < 10) return;
+  NSLog(@"Speed is %f -- %f -- dist: %ld -- elaps: %d", curLocation.speed, newLocation.speed, dist, elapse);
+
+  curLocation = newLocation;
+
 
   NSString * locLog = [NSString stringWithFormat:@"%f,%f,%f",  newTime,
                        curLocation.coordinate.latitude, curLocation.coordinate.longitude];

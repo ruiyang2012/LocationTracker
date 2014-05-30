@@ -532,12 +532,21 @@
   @synchronized(db) {
     [db executeUpdate:[NSString stringWithFormat:CLEAN_OLD_TS, aMonthAgo]];
     FMResultSet * r = [db executeQuery:[NSString stringWithFormat:CAL_DELTA, @"%", @"%", lastTime]];
-
+    NSMutableDictionary * timeCount = [[NSMutableDictionary alloc] init];
     while ([r next]) {
       long time = [r longForColumn:@"time"];
       long diff = [r longForColumn:@"diff"];
-      [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
+      NSNumber * k = [NSNumber numberWithLong:time];
+      NSNumber * c = [timeCount objectForKey:k];
+      long sum = c ? diff : [c longValue] + diff;
+      [timeCount setObject:[NSNumber numberWithLong:sum] forKey:k];
       hasData = YES;
+    }
+      // need to do a reduce step
+    for (NSNumber * k in timeCount) {
+      long time = [k longValue];
+      long diff = [[timeCount objectForKey:k] longValue];
+      [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
     }
     [self updateLastTimeSeries];
     if (hasData) [self aggregateHistogram:@"apple_map" ts:lastTime];
