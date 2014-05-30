@@ -96,7 +96,8 @@
 
 - (CLLocation*) addOneMarker:(NSDictionary*) locDic {
   NSString* bucket = [locDic objectForKey:@"bucket"];
-
+  int dur = [[locDic objectForKey:@"duration"] intValue];
+  if (dur < 60 * 8) return nil;
   LincAnnotation * pin =[pins objectForKey:bucket];
   if (pin) {
     if (forceAddMarker) [self.mapView addAnnotation:pin];
@@ -139,8 +140,11 @@
   for (id locDic in todayLocations) {
     int stay = [[locDic objectForKey:@"duration"] intValue];
     if (stay < 60) continue; // not render pin if too short
-    lastLocation = curLoc;
-    curLoc = [self addOneMarker:locDic];
+    CLLocation * l = [self addOneMarker:locDic];
+    if (l) {
+      lastLocation = curLoc;
+      curLoc = l;
+    }
   }
   int latestDistance = [lastLocation distanceFromLocation:curLoc];
   if (latestDistance > radius / 1.5 && latestDistance < 1600 * 20) {
