@@ -38,7 +38,7 @@
   // use max working speed 3 as filter
 #define GET_ALL_UNCONFIRMED_TIME @"select t_value, time from time_series_data where t_type='raw_data' and speed < 3"
 #define GET_ALL_AGGREGATE_TIME @"select t_value, sum(delta) as s from time_series_data where t_type='%@' and time >= %ld group by t_value"
-#define CAL_DELTA @"SELECT B.time, (A.time - B.time) as diff from time_series_data A INNER JOIN time_series_data B on A.ID > B.ID and A.t_type like 'raw_data%@' and B.t_type like 'raw_data%@'  and A.time > %ld group by A.ID"
+#define CAL_DELTA @"SELECT B.time, (A.time - B.time) as diff from time_series_data A INNER JOIN time_series_data B on A.time > B.time and A.t_type like 'raw_data%@' and B.t_type like 'raw_data%@'  and A.time > %ld group by A.time"
 #define GET_LATEST_RAW_TIME @"select time, delta from time_series_data where t_type like 'raw_data%' order by time desc limit 1"
 #define GET_MAX_HISTOGRAM @"select max(sums) as s, bucket, display from histogram"
 #define GET_TOP_HISTOGRAM @"select bucket, display, sums from histogram where sums > %d order by sums desc limit %d"
