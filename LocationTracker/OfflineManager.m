@@ -475,6 +475,7 @@
     FMResultSet * r = [db executeQuery:[NSString stringWithFormat:COUNT_TS_FOR_TS, [time longValue], type]];
     int rowCount =  0;
     if ([r next]) { rowCount = [r intForColumn:@"c"]; }
+    [r close];
     if (rowCount == 0) [db executeUpdate:INSERT_TIME_SERIES, time, type, loc, speed];
     
   }
@@ -490,10 +491,16 @@
   FMResultSet * r = nil;
   NSString * sql = [NSString stringWithFormat:GET_ALL_AGGREGATE_TIME, type, ts];
   r = [db executeQuery:sql];
+  NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
   while ([r next]) {
     NSString* val = [r stringForColumn:@"t_value"];
     int delta = [r intForColumn:@"s"];
     if (delta < 1) continue;
+    [dict setObject:[NSNumber numberWithInt:delta] forKey:val];
+  }
+  [r close];
+  for (NSString * val in dict) {
+    int delta = [[dict objectForKey:val] intValue];
     FMResultSet * histRow = [db executeQuery:[NSString stringWithFormat:FIND_MATCH_HISTOGRAM, val]];
     if ([histRow next]) {
       int rowCount = [histRow intForColumn:@"c"];
@@ -504,8 +511,8 @@
     } else {
       NSLog(@"Error run select histogram count");
     }
+    [histRow close];
     [db executeUpdate:[NSString stringWithFormat:UPD_HISTOGRAM, delta, val]];
-    
   }
 }
 
@@ -527,7 +534,7 @@
   long now = [[NSDate date] timeIntervalSince1970];
   if (now - lastTime < 10) {
     if (!hasBackgroundDeltaJob) {
-      [self performSelector:@selector(calDeltaInTimeSeries) withObject:nil afterDelay:10];
+      [self performSelectorOnMainThread:@selector(calDeltaInTimeSeries) withObject:nil waitUntilDone:NO];
       hasBackgroundDeltaJob = YES;
     }
     return;
@@ -548,6 +555,7 @@
       [timeCount setObject:[NSNumber numberWithLong:sum] forKey:k];
       hasData = YES;
     }
+    [r close];
       // need to do a reduce step
     for (NSNumber * k in timeCount) {
       long time = [k longValue];
