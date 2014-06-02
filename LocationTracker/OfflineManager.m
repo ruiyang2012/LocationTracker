@@ -523,6 +523,7 @@
   if ([r next]) {
     long time = [r longForColumn:@"time"];
     long diff = now - time;
+    [r close];
     [db executeUpdate:[NSString stringWithFormat:UPDATE_DELTA, diff, time]];
     
   }
@@ -619,6 +620,7 @@
   if ([r next]) {
     value = [r doubleForColumn:@"s"];
   }
+  [r close];
   if (value < 60) {
     [self aggregateHistogram:@"apple_map" ts:0];
   }
