@@ -96,13 +96,15 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 - (void) netStatus:(NSNotification *)notify {
   if ([offlineMg isOffline]) return;
     // geo look up all raw_data again.
-  NSArray * arr = [offlineMg getAllUnconfirmedGeo];
-  for (id item in arr) {
-    NSArray * locArr = [item[0] componentsSeparatedByString:@","];
-    NSNumber * time = item[1];
-    CLLocation * loc = [[CLLocation alloc] initWithLatitude:[locArr[0] doubleValue] longitude:[locArr[1] doubleValue]];
-    [self lookupLocation:loc updateTime:time];
-  }
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSArray * arr = [offlineMg getAllUnconfirmedGeo];
+    for (id item in arr) {
+      NSArray * locArr = [item[0] componentsSeparatedByString:@","];
+      NSNumber * time = item[1];
+      CLLocation * loc = [[CLLocation alloc] initWithLatitude:[locArr[0] doubleValue] longitude:[locArr[1] doubleValue]];
+      [self lookupLocation:loc updateTime:time];
+    }
+  });
 }
 
 - (void) locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
@@ -156,7 +158,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   [locLogs addObject:locLog];
     //NSLog(@"New lat long: lat%f - lon%f", curLocation.coordinate.latitude, curLocation.coordinate.longitude);
     //if ([oldLocation speed] < MAX_WALKING_SPEED && [newLocation speed] < MAX_WALKING_SPEED) {
-  [self performSelectorInBackground:@selector(onLocUpd:) withObject:newLocation];
+  [self performSelectorOnMainThread:@selector(onLocUpd:) withObject:newLocation waitUntilDone:NO];
     //}
   [self dispatchLocationChange:oldLocation to:newLocation duration:elapse];
 
