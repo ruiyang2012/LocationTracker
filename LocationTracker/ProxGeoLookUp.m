@@ -25,8 +25,13 @@
                  @"Food": @"4d4b7105d754a06374d81259",
                  @"Nightlife Spot": @"4d4b7105d754a06376d81259",
                  //@"Outdoors & Recreation": @"4d4b7105d754a06377d81259",
-                 @"Shop & Service": @"4d4b7105d754a06378d81259"
-                 //@"Travel & Transport": @"4d4b7105d754a06379d81259"
+                 @"Shop & Service": @"4d4b7105d754a06378d81259",
+                 //@"Travel & Transport": @"4d4b7105d754a06379d81259",
+                 @"Airport Food Court" : @"4bf58dd8d48988d1ef931735",
+                 @"Airport Terminal": @"4bf58dd8d48988d1eb931735",
+                 @"Hotel" : @"4bf58dd8d48988d1fa931735",
+                 @"Mall": @"4bf58dd8d48988d1fd941735"
+                 
                  };
   session = [NSURLSession sharedSession];
   return self;
