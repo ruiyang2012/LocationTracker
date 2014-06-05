@@ -21,6 +21,7 @@
   BOOL forceAddMarker;
   CLLocation* lastCenteredCord;
   MKPointAnnotation * homePin;
+  NSTimeInterval mapViewUpdated;
 }
 
 @end
@@ -35,6 +36,7 @@
   radius = 4800;
   isCenteredOnce = NO;
   forceAddMarker = NO;
+  mapViewUpdated = [[NSDate date] timeIntervalSinceReferenceDate];
 
   UIBarButtonItem * flipBtn = [[UIBarButtonItem alloc] initWithTitle:@"All" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleToday:)];
   UIBarButtonItem * leftBtn = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleHome:)];
@@ -82,6 +84,7 @@
 
 - (void)locationChange:(NSNotification*) notify {
   id dict = notify.object;
+  NSLog(@"location change");
   if ([dict isKindOfClass:[NSDictionary class]]) {
     CLLocation* loc = [dict objectForKey:@"newLocation"];
     if ([loc speed] < 5) [self updateMap];
@@ -101,6 +104,7 @@
   if (pin) {
     if (forceAddMarker) [self.mapView addAnnotation:pin];
     pin.locationDict = locDic;
+    [pin updateWithMapView:self.mapView];
     return pin.curLoc;
   }
   
@@ -153,6 +157,7 @@
     NSLog(@"adjusted radius is %d", radius);
   }
   if (curLoc && !isCenteredOnce) { [self centerAtLocation:curLoc.coordinate]; }
+  mapViewUpdated = [[NSDate date] timeIntervalSinceReferenceDate];
 
 }
 
@@ -174,6 +179,9 @@
     isCenteredOnce = YES;
   }
   lastCenteredCord = userLocation.location;
+  if ([[NSDate date] timeIntervalSinceReferenceDate] - mapViewUpdated > 60) {
+    [self updateMap];
+  }
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
