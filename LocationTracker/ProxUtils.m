@@ -371,7 +371,8 @@ static NSString * docRoot = nil;
   NSString * tmpPath = NSTemporaryDirectory();
   NSString * aPath = [tmpPath stringByAppendingPathComponent:fileName];
   NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:aPath];
-  NSString * v = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSString * v = [[value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByAppendingString:@"\n"];
+  
   if (!fileHandle) {
     [v writeToFile:aPath atomically:YES encoding:NSUTF8StringEncoding error:&theError];
     return;
