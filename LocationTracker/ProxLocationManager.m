@@ -157,7 +157,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
                          curLocation.coordinate.latitude, curLocation.coordinate.longitude];
     [locLogs addObject:locLog];
   }
-
+  [self addLocation:newLocation];
   [self performSelectorOnMainThread:@selector(onLocUpd:) withObject:newLocation waitUntilDone:NO];
 }
 
@@ -171,7 +171,8 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void) onLocUpd:(CLLocation*) loc {
   
-  [self addLocation:loc];
+
+  [offlineMg calDeltaInTimeSeries];
     // look up using google place api and four square api here:
   double firstLaunch = [[NSUserDefaults standardUserDefaults] doubleForKey:@"firstLaunch"];
   NSDate * firstLaunchDate = [NSDate dateWithTimeIntervalSince1970:firstLaunch];
@@ -211,7 +212,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   if (![offlineMg isOffline] && curLoc.speed < MAX_WALKING_SPEED) {
     [self lookupLocation:curLoc updateTime:nowNum];
   }
-  [offlineMg calDeltaInTimeSeries];
+  
 
   [self dispatchLocationChange:curLocation to:curLoc duration:elapse];
   curLocation = curLoc;
