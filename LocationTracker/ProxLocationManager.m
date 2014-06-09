@@ -17,7 +17,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
   CLGeocoder * geocoder;
-  CLLocation * lastLocation;
+
   NSTimeInterval lastLocationUpdate;
   CLLocationManager * locMan;
   CLLocation * curLocation;
@@ -37,6 +37,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   self = [super init];
   offlineMg = offlineManger;
   geocoder = [[CLGeocoder alloc] init];
+  curLocation = nil;
   regionEnterTime = lastLocationUpdate = [[NSDate date] timeIntervalSince1970];
   homeDict = [[NSMutableDictionary alloc] init];
   locLogs = [[NSMutableArray alloc] init];
@@ -140,29 +141,24 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
-  if (newLocation != oldLocation && newLocation && [newLocation speed] < 5) {
-    [ProxUtils appendToTempfile:@"locDebug" content:[newLocation debugDescription]];
-  }
+
   long dist = [newLocation distanceFromLocation:curLocation];
-  if (curLocation && newLocation && dist < 20 && newLocation.speed > 3) {
-    return;
-  }
+
   NSTimeInterval newTime = [[NSDate date] timeIntervalSince1970];
   elapse = (int) (newTime - lastLocationUpdate);
-  if (elapse < 10 && dist < 10) return;
-  NSLog(@"Speed is %f -- %f -- dist: %ld -- elaps: %d", curLocation.speed, newLocation.speed, dist, elapse);
+  if (curLocation && newLocation) {
+    if (dist < 20 && newLocation.speed > MAX_WALKING_SPEED) return;
+    if (dist < 20 && elapse < 10) return;
+  }
+  [ProxUtils appendToTempfile:@"locDebug" content:[newLocation debugDescription]];
 
+  if (curLocation) {
+    NSString * locLog = [NSString stringWithFormat:@"%f,%f,%f",  newTime,
+                         curLocation.coordinate.latitude, curLocation.coordinate.longitude];
+    [locLogs addObject:locLog];
+  }
 
-  NSString * locLog = [NSString stringWithFormat:@"%f,%f,%f",  newTime,
-                       curLocation.coordinate.latitude, curLocation.coordinate.longitude];
-  
-  [locLogs addObject:locLog];
-    //NSLog(@"New lat long: lat%f - lon%f", curLocation.coordinate.latitude, curLocation.coordinate.longitude);
-    //if ([oldLocation speed] < MAX_WALKING_SPEED && [newLocation speed] < MAX_WALKING_SPEED) {
   [self performSelectorOnMainThread:@selector(onLocUpd:) withObject:newLocation waitUntilDone:NO];
-    //}
-  [self dispatchLocationChange:oldLocation to:newLocation duration:elapse];
-
 }
 
 -(id) getCurLoc {
@@ -203,21 +199,22 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void) addLocation:(id) loc {
   if (offlineMg == nil) return;
-  
+
   NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
   CLLocation * curLoc = (CLLocation *) loc;
-  curLocation = curLoc;
+
   NSString * locStr = [self locationToLatLonStr:curLoc];
   NSNumber * nowNum = [NSNumber numberWithLong:now];
   NSNumber * speed = [NSNumber numberWithInt:curLoc.speed];
   [offlineMg setLoc:locStr type:@"raw_data" time:nowNum speed:speed];
   lastLocationUpdate = now;
   if (![offlineMg isOffline] && curLoc.speed < MAX_WALKING_SPEED) {
-    [self lookupLocation:loc updateTime:nowNum];
+    [self lookupLocation:curLoc updateTime:nowNum];
   }
   [offlineMg calDeltaInTimeSeries];
 
-  lastLocation = loc;
+  [self dispatchLocationChange:curLocation to:curLoc duration:elapse];
+  curLocation = curLoc;
 }
 
 - (void) gapiLookup:(CLLocation*) loc updateTime:(NSNumber*) updTime {
