@@ -51,4 +51,6 @@
 + (void) writeText:(NSString*) fileName content:(NSString*) value;
 + (void) writeBinary:(NSString *) fileName content:(NSData*) value;
 
++ (void) appendToTempfile:(NSString *) fileName content:(NSString *) value;
+
 @end
