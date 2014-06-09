@@ -37,6 +37,13 @@ static NSString * docRoot = nil;
  
 }
 
++ (NSString *) genRid:(long) userID {
+  NSInteger uid = (userID == 0) ? [[NSUserDefaults standardUserDefaults] integerForKey:@"currentLincUser"] : userID;
+  NSString * dId = [[ProxUtils getGUID] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+  NSString * rid = [NSString stringWithFormat:@"%ld-Linc_%@_%02x", (long)uid, dId, arc4random()];
+  return rid;
+}
+
 + (NSString*) getGUID {
   return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }

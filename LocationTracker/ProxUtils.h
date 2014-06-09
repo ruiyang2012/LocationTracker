@@ -15,6 +15,7 @@
 + (NSString*) getJsonStrFromJsonObj:(NSDictionary *) dict;
 + (NSMutableDictionary*) getJsonObjFromJsonStr:(NSString*) json;
 + (NSString*) getGUID;
++ (NSString *) genRid:(long) userID;
 + (NSString*) generateRandomString;
 + (NSString*) decodeB64String: (NSString*) b64String;
 + (NSString*) b64EncodeString: (NSString*) text;
