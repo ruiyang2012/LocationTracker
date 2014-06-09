@@ -140,6 +140,9 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
+  if (newLocation != oldLocation && newLocation && [newLocation speed] < 5) {
+    [ProxUtils appendToTempfile:@"locDebug" content:[newLocation debugDescription]];
+  }
   long dist = [newLocation distanceFromLocation:curLocation];
   if (curLocation && newLocation && dist < 20 && newLocation.speed > 3) {
     return;
