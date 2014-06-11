@@ -569,22 +569,34 @@
   if (hasData) [[NSUserDefaults standardUserDefaults] setInteger:now forKey:@"lastDeltaTimeStamp"];
 }
 
-- (NSString*) getLongestOvernightLocation {
-  FMResultSet * r = nil;
-  
+- (NSString *) getLocStrFrom:(int) start end:(int) end minStay:(int) minStay {
   @synchronized(db) {
-    NSDate* td = [ProxUtils getYesterday];
-    int start = [td timeIntervalSince1970] + 3600 * 18;
-    int end = start + 3600 * 14;
-    r = [db executeQuery:[NSString stringWithFormat:GROUP_BY_LARGEST_TIME, start, end]];
-    if ([r next]) {
-      NSString* bucket = [r stringForColumn:@"t_value"];
-      NSArray * array = [bucket componentsSeparatedByString:@"|"];
-      if (array) return [NSString stringWithFormat: @"%@,%@", array[0], array[1]];
-    }
+    FMResultSet * r = [db executeQuery:[NSString stringWithFormat:GROUP_BY_LARGEST_TIME, start, end]];
+    if (![r next]) return nil;
+    NSString* bucket = [r stringForColumn:@"t_value"];
+    int stay = [r intForColumn:@"s"];
+    [r close];
+    if (stay < minStay) return nil;
+    NSArray * array = [bucket componentsSeparatedByString:@"|"];
+    if (array) return [NSString stringWithFormat: @"%@,%@", array[0], array[1]];
   }
   return nil;
 }
+
+- (NSString*) getLongestOvernightLocation {
+    NSDate* td = [ProxUtils getYesterday];
+    int start = [td timeIntervalSince1970] + 3600 * 18;
+    int end = start + 3600 * 14;
+    return [self getLocStrFrom:start end:end minStay:3600];
+}
+
+- (NSString*) getLongestDayTimeLocation {
+    NSDate* td = [ProxUtils getToday];
+    int start = [td timeIntervalSince1970] + 3600 * 8;
+    int end = start + 3600 * 10;
+    return [self getLocStrFrom:start end:end minStay:3600 * 4];
+}
+
 
 - (NSArray*) getAllUnconfirmedGeo {
   NSMutableArray * result = [[NSMutableArray alloc] init];

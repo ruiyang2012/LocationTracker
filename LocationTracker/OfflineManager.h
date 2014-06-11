@@ -48,6 +48,7 @@
 - (void) setLoc:(NSString*)loc type:(NSString*) type time:(NSNumber*)time speed:(NSNumber*)speed;
 
 - (NSString*) getLongestOvernightLocation;
+- (NSString*) getLongestDayTimeLocation;
 
 - (NSArray*) getTodayLocations;
 
