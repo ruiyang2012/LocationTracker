@@ -69,6 +69,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   locMan.distanceFilter = kCLDistanceFilterNone;
   locMan.desiredAccuracy = kCLLocationAccuracyBest;
     //[locMan startMonitoringSignificantLocationChanges];
+  [locMan setPausesLocationUpdatesAutomatically:NO];
   [locMan startUpdatingLocation];
 }
 
