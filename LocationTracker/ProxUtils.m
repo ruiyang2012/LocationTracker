@@ -343,8 +343,7 @@ static NSString * docRoot = nil;
   return d;
 }
 
-+ (NSString*) readText:(NSString*) fileName {
-  NSString * path = [ProxUtils getFullPath:fileName];
++ (NSString *) readTextFromFullPath:(NSString *) path {
   NSError * theError;
   NSString * v = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&theError];
   if (theError) {
@@ -352,6 +351,11 @@ static NSString * docRoot = nil;
   }
   NSString * result = [v stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   return [result length] == 0 ? nil : result;
+}
+
++ (NSString*) readText:(NSString*) fileName {
+  NSString * path = [ProxUtils getFullPath:fileName];
+  return [ProxUtils readTextFromFullPath:path];
 }
 
 + (void) writeText:(NSString*) fileName content:(NSString*) value {
@@ -364,6 +368,12 @@ static NSString * docRoot = nil;
 + (void) writeBinary:(NSString *) fileName content:(NSData*) value {
   NSString * path = [ProxUtils getFullPath:fileName];
   [value writeToFile:path atomically:YES];
+}
+
++ (NSString *) readTextFromTempFile:(NSString *) fileName {
+  NSString * tmpPath = NSTemporaryDirectory();
+  NSString * aPath = [tmpPath stringByAppendingPathComponent:fileName];
+  return [ProxUtils readTextFromFullPath:aPath];
 }
 
 + (void) appendToTempfile:(NSString *) fileName content:(NSString *) value {
