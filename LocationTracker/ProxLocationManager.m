@@ -12,7 +12,7 @@
 #import "ProxUtils.h"
 
 static const int MAX_WALKING_SPEED = 3; // 3 meters/s
-static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?sensor=false&location_type=ROOFTOP&result_type=street_address&key=AIzaSyDk2hk_TQDAUus5uG9GZc-0EfypzMMe__0&latlng=";
+static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?sensor=false&location_type=ROOFTOP&result_type=street_address&key=AIzaSyCxlSEkVBLdnH-_-lNo4Z-fXd-T7KGLKVg&latlng=";
 
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
@@ -250,7 +250,10 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     if (!json) return;
     NSArray * array = json[@"results"];
     NSDictionary * addr = [array firstObject];
-    if (!addr) return;
+    if (!addr) {
+      [self gapiLookup:loc updateTime:updTime];
+      return;
+    }
     NSString * lat = [addr[@"geometry"][@"location"][@"lat"] stringValue];
     NSString * lon = [addr[@"geometry"][@"location"][@"lng"] stringValue];
     NSArray * addrComponents = addr[@"address_components"];
