@@ -68,9 +68,21 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   locMan.delegate = self;
   locMan.distanceFilter = kCLDistanceFilterNone;
   locMan.desiredAccuracy = kCLLocationAccuracyBest;
-    //[locMan startMonitoringSignificantLocationChanges];
+
   [locMan setPausesLocationUpdatesAutomatically:NO];
   [locMan startUpdatingLocation];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEnterForeround:) name:UIApplicationWillEnterForegroundNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+}
+
+- (void) onEnterBackground:(NSNotification *) notification {
+   [locMan stopUpdatingLocation];
+   [locMan startMonitoringSignificantLocationChanges];
+}
+
+- (void) onEnterForeround:(NSNotification *) notification {
+   [locMan stopMonitoringSignificantLocationChanges];
+   [locMan startUpdatingLocation];
 }
 
 - (CLLocation *) locationStrToLoc:(NSString *) locStr sep:(NSString*)sep{
