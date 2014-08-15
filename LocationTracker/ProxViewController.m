@@ -53,6 +53,7 @@
   [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(updateMap) userInfo:nil repeats:YES];
   homePin = [[MKPointAnnotation alloc] init];
   homePin.title = @"Home";
+  [notCenter postNotificationName:@"LincStartLocation" object:nil];
 }
 
 - (IBAction) toggleHome:(UIBarButtonItem*)sender {

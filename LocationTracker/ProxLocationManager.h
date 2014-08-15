@@ -23,5 +23,6 @@
 
 - (CLLocation *) getHomeLocation;
 
+- (NSString*) placemarkToStr:(CLPlacemark*) pl;
 
 @end

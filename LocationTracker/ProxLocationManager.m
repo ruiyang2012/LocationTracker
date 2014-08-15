@@ -13,6 +13,7 @@
 
 static const int MAX_WALKING_SPEED = 3; // 3 meters/s
 static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/geocode/json?sensor=false&location_type=ROOFTOP&result_type=street_address&key=AIzaSyCxlSEkVBLdnH-_-lNo4Z-fXd-T7KGLKVg&latlng=";
+NSString* OPENSTREET_BASE = @"http://west-ops.letslinc.com/nominatim/reverse.php?format=json&lat=%f&lon=%f&zoom=18&addressdetails=1";
 
 @interface ProxLocationManager() <CLLocationManagerDelegate> {
   OfflineManager * offlineMg;
@@ -41,8 +42,11 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   regionEnterTime = lastLocationUpdate = [[NSDate date] timeIntervalSince1970];
   homeDict = [[NSMutableDictionary alloc] init];
   locLogs = [[NSMutableArray alloc] init];
+
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netStatus:) name:@"ProxOfflineStatusChange" object:nil];
-  [self setupLocationManager];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLocationManager:) name:@"LincStartLocation" object:nil];
+
+    //[self setupLocationManager];
   NSString * homeLocStr = [[NSUserDefaults standardUserDefaults] objectForKey:@"homeLocation"];
   homeLocation = [self locationStrToLoc:homeLocStr sep:@","];
   if (homeLocStr) [homeDict setObject:@(1) forKey:homeLocStr];
@@ -62,25 +66,29 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   [locLogs removeAllObjects];
 }
 
-- (void) setupLocationManager {
+- (void) setupLocationManager:(NSNotification *)notify  {
   if (locMan != nil) return;
   locMan = [[CLLocationManager alloc] init];
   locMan.delegate = self;
   locMan.distanceFilter = kCLDistanceFilterNone;
   locMan.desiredAccuracy = kCLLocationAccuracyBest;
-
-  [locMan setPausesLocationUpdatesAutomatically:NO];
+  [locMan setActivityType:CLActivityTypeFitness];
+  [locMan setPausesLocationUpdatesAutomatically:YES];
   [locMan startUpdatingLocation];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEnterForeround:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onEnterBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+  curLocation = [locMan location];
+  if (curLocation) [self addLocation:curLocation];
 }
 
 - (void) onEnterBackground:(NSNotification *) notification {
+    NSLog(@"startMonitoringSignificantLocationChanges");
    [locMan stopUpdatingLocation];
    [locMan startMonitoringSignificantLocationChanges];
 }
 
 - (void) onEnterForeround:(NSNotification *) notification {
+    NSLog(@"startUpdatingLocation");
    [locMan stopMonitoringSignificantLocationChanges];
    [locMan startUpdatingLocation];
 }
@@ -107,8 +115,16 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
             pl.ISOcountryCode, pl.postalCode];
 }
 
+- (BOOL) isLateNight {
+  NSCalendar *calendar = [NSCalendar currentCalendar];
+  NSDateComponents *components = [calendar components:(NSHourCalendarUnit) fromDate:[NSDate date]];
+  NSInteger hour = [components hour];
+  if (hour > 1 && hour < 5) return YES;
+  return NO;
+}
+
 - (void) netStatus:(NSNotification *)notify {
-  if ([offlineMg isOffline]) return;
+  if ([offlineMg isOffline] || [self isLateNight]) return;
     // geo look up all raw_data again.
   dispatch_async(dispatch_get_main_queue(), ^{
     NSArray * arr = [offlineMg getAllUnconfirmedGeo];
@@ -231,7 +247,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   curLocation = curLoc;
 }
 
-- (void) gapiLookup:(CLLocation*) loc updateTime:(NSNumber*) updTime {
+- (void) geoCoderReverse:(CLLocation*) loc updateTime:(NSNumber*) updTime {
   [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
     if (error || [placemarks count] ==0) {
       NSLog(@"location lookup error: %@ or no place", error);
@@ -248,13 +264,13 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
   
 }
 
-- (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
+- (void) gplaceApiReverse:(CLLocation *) loc updateTime:(NSNumber*) updTime {
   NSString * gapi = [NSString stringWithFormat:@"%@%f,%f", GAPI_BASE_URL, loc.coordinate.latitude, loc.coordinate.longitude];
   NSURL * url = [NSURL URLWithString:gapi];
   [[session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
     if (error) {
         // nslog
-      [self gapiLookup:loc updateTime:updTime];
+      [self geoCoderReverse:loc updateTime:updTime];
       return;
     }
     NSError * jsonError = nil;
@@ -263,7 +279,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     NSArray * array = json[@"results"];
     NSDictionary * addr = [array firstObject];
     if (!addr) {
-      [self gapiLookup:loc updateTime:updTime];
+      [self geoCoderReverse:loc updateTime:updTime];
       return;
     }
     NSString * lat = [addr[@"geometry"][@"location"][@"lat"] stringValue];
@@ -298,7 +314,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     }
     if ([ProxUtils isEmptyString:city]) city = locality;
     if ([ProxUtils isEmptyString:city] || [ProxUtils isEmptyString:name]) {
-      [self gapiLookup:loc updateTime:updTime];
+      [self geoCoderReverse:loc updateTime:updTime];
       return;
     }
     street = [NSString stringWithFormat:@"%@ %@", streetNo, name];
@@ -309,7 +325,46 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
     [offlineMg setLoc:locStr type:@"apple_map" time:updTime speed:speed];
     [offlineMg calDeltaInTimeSeries];
   }] resume];
-  
+
+}
+
+- (void) lookupLocation:(CLLocation *) loc updateTime:(NSNumber*) updTime {
+  if ([self isLateNight]) return;
+  NSString * openstreetApi = [NSString stringWithFormat:OPENSTREET_BASE, loc.coordinate.latitude, loc.coordinate.longitude];
+  NSURL * url = [NSURL URLWithString:openstreetApi];
+  [[session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    if (error) {
+        // nslog
+      [self gplaceApiReverse:loc updateTime:updTime];
+      return;
+    }
+    NSError * jsonError = nil;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    if (!json || !json[@"address"]) return;
+
+    NSString * lat = json[@"lat"];
+    NSString * lon = json[@"lon"];
+    NSString * streetNo = json[@"address"][@"house_number"];
+    NSString * street = json[@"address"][@"road"];
+    NSString * city = json[@"address"][@"city"];
+    if (!city) city = json[@"address"][@"town"];
+    NSString * state = json[@"address"][@"state"];
+    NSString * cc = json[@"address"][@"country_code"];
+    NSString * zip = json[@"address"][@"postcode"];
+    if (!streetNo) streetNo = @"";
+    NSString * name = [NSString stringWithFormat:@"%@ %@", streetNo, street];
+
+    if ([ProxUtils isEmptyString:city] || [ProxUtils isEmptyString:street]) {
+      [self gplaceApiReverse:loc updateTime:updTime];
+      return;
+    }
+    NSArray * locArr = @[lat, lon, street, name, city, state, cc, zip];
+    NSString * locStr = [locArr componentsJoinedByString:@"|"];
+    [offlineMg updateTimeSeriesType:@"raw_data_confirmed" key:[self locationToLatLonStr:loc]];
+    NSNumber * speed = [NSNumber numberWithInt:loc.speed];
+    [offlineMg setLoc:locStr type:@"apple_map" time:updTime speed:speed];
+    [offlineMg calDeltaInTimeSeries];
+  }] resume];
 
 }
 
@@ -327,6 +382,7 @@ static const NSString* GAPI_BASE_URL = @"https://maps.googleapis.com/maps/api/ge
 }
 
 - (void) checkRegionAndRule {
+  if (!locMan) return;
   NSArray * regions = [offlineMg getLongestStayOfAllTime:300 limit:20];
   for (id regionStr in regions) {
     CLLocation * cl = [self locationStrToLoc:regionStr sep:@"|"];
