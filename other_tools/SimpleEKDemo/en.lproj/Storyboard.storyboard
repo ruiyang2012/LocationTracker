@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" promptedForUpgradeToXcode5="NO" initialViewController="lpN-ut-0Aa">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="4600" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+    </dependencies>
+    <scenes>
+        <!--Events List-->
+        <scene sceneID="xNg-69-V27">
+            <objects>
+                <tableViewController storyboardIdentifier="rootViewController" id="YVn-4d-CUA" customClass="RootViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="J4Q-9G-mDD">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="eventCell" textLabel="Ety-tf-dzB" style="IBUITableViewCellStyleDefault" id="Qmf-gL-eML">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" useAutomaticPreferredMaxLayoutWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ety-tf-dzB">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <connections>
+                                    <segue destination="I33-PZ-JG6" kind="push" identifier="showEventViewController" id="PJf-qL-ojv"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YVn-4d-CUA" id="Wyu-tF-e7l"/>
+                            <outlet property="delegate" destination="YVn-4d-CUA" id="0gk-W9-fiW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Events List" id="vK1-EW-f65">
+                        <barButtonItem key="leftBarButtonItem" systemItem="camera" id="7at-pq-FoA">
+                            <connections>
+                                <segue destination="ecv-er-p98" kind="modal" id="JSc-hN-IDX"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="ILv-nC-0Hv">
+                            <connections>
+                                <action selector="addEvent:" destination="YVn-4d-CUA" id="CYU-9E-HOw"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addButton" destination="ILv-nC-0Hv" id="JNV-Vx-5ld"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cyL-2e-sE9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="585" y="84"/>
+        </scene>
+        <!--Camera View Controller-->
+        <scene sceneID="Ivo-Ko-Sww">
+            <objects>
+                <viewController id="ecv-er-p98" customClass="CameraViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="g4b-Em-1ew">
+                        <rect key="frame" x="0.0" y="64" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2HT-Y8-kTU">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9l-jp-Vp3">
+                                        <rect key="frame" x="118" y="460" width="72" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="72" id="mcB-1J-9SJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Capture">
+                                            <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="captureTapped:" destination="ecv-er-p98" eventType="touchUpInside" id="C7y-gS-zdH"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="O9l-jp-Vp3" firstAttribute="leading" secondItem="2HT-Y8-kTU" secondAttribute="leading" constant="118" id="VWy-ua-DRa"/>
+                                    <constraint firstAttribute="bottom" secondItem="O9l-jp-Vp3" secondAttribute="bottom" constant="45" id="hlv-ei-nQc"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="2HT-Y8-kTU" secondAttribute="trailing" type="default" id="TTu-gF-Kbx"/>
+                            <constraint firstItem="2HT-Y8-kTU" firstAttribute="top" secondItem="g4b-Em-1ew" secondAttribute="top" type="default" id="dhG-eM-VER"/>
+                            <constraint firstAttribute="bottom" secondItem="2HT-Y8-kTU" secondAttribute="bottom" type="default" id="oge-kt-3od"/>
+                            <constraint firstItem="2HT-Y8-kTU" firstAttribute="leading" secondItem="g4b-Em-1ew" secondAttribute="leading" type="default" id="vgP-IC-K4C"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="XCT-3Z-mhL"/>
+                    <connections>
+                        <outlet property="cameraView" destination="2HT-Y8-kTU" id="KLq-xG-knR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OD4-mX-Gg9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="445" y="784"/>
+        </scene>
+        <!--My Event View Controller-->
+        <scene sceneID="LHC-iv-mnw">
+            <objects>
+                <viewController storyboardIdentifier="eventViewController" id="I33-PZ-JG6" customClass="MyEventViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4zp-Bs-Eay">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="WNH-41-huv"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4YJ-kV-BrD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1155" y="79"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="GVp-kG-QJA">
+            <objects>
+                <navigationController id="lpN-ut-0Aa" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wjb-ml-H16">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="YVn-4d-CUA" kind="relationship" relationship="rootViewController" id="Kvh-g0-acQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IWb-bn-w9Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52" y="84"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
