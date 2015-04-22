@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class MyParentTableViewController;
+@protocol MyParentTableViewControllerDelegate
+- (void) onReset;
+@end
 
 @interface MyParentTableViewController : UITableViewController
 

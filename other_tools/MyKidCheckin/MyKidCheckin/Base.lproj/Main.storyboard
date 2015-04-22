@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1077" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fxj-ld-tMu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Fxj-ld-tMu">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -72,10 +72,10 @@
             </objects>
             <point key="canvasLocation" x="901" y="915"/>
         </scene>
-        <!--View Controller-->
+        <!--My Map Controller-->
         <scene sceneID="0od-Fb-RAU">
             <objects>
-                <viewController id="ihr-sz-QI4" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="myMapViewController" id="ihr-sz-QI4" customClass="MyMapController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MJ1-DY-59h"/>
                         <viewControllerLayoutGuide type="bottom" id="E8P-6i-Wyv"/>
@@ -84,18 +84,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6vq-77-qpg">
+                                <rect key="frame" x="16" y="50" width="527" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Ycq-Zz-phb">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="myLabel" destination="6vq-77-qpg" id="jhp-w7-YSr"/>
+                        <outlet property="myMapView" destination="Ycq-Zz-phb" id="PiR-CV-JCw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nRP-94-kbD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-579" y="865"/>
         </scene>
-        <!--My Parent Table View Controller-->
+        <!--Item-->
         <scene sceneID="vRL-hc-dPI">
             <objects>
                 <tableViewController storyboardIdentifier="myParentViewController" id="Tlj-44-24K" customClass="MyParentTableViewController" sceneMemberID="viewController">
@@ -127,13 +137,20 @@
                             <outlet property="delegate" destination="Tlj-44-24K" id="eQk-pN-Yg0"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Item" id="vO8-3z-dcW"/>
                     <navigationItem key="navigationItem" id="d3K-DN-lrB">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="S9V-Gg-gtG">
+                            <connections>
+                                <action selector="onReset:" destination="Tlj-44-24K" id="jPl-6k-0g8"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="fXj-yG-ERs">
                             <connections>
                                 <action selector="addNewKids:" destination="Tlj-44-24K" id="ZHX-e3-jZl"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6N-1W-GD0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -177,12 +194,13 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Tlj-44-24K" kind="relationship" relationship="rootViewController" id="W5P-4F-e6g"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bg2-Fh-hYN"/>
+                        <segue destination="Tlj-44-24K" kind="custom" id="8e8-WO-7ja"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D27-hb-6VO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-43" y="193"/>
+            <point key="canvasLocation" x="-23" y="132"/>
         </scene>
     </scenes>
 </document>

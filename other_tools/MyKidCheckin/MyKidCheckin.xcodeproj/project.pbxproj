@@ -18,6 +18,8 @@
 		CEAB33A11AD83DB700393DC5 /* MyKidViewDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEAB33A01AD83DB700393DC5 /* MyKidViewDetailController.m */; };
 		CEAB33A31AD893F200393DC5 /* qrcode.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAB33A21AD893F200393DC5 /* qrcode.png */; };
 		CEAB33A61AD8B17300393DC5 /* MyChildCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CEAB33A51AD8B17300393DC5 /* MyChildCell.m */; };
+		CEEF8F921AE05FDF005FF5C4 /* MyMapController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */; };
+		CEEF8F941AE0607F005FF5C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF8F931AE0607F005FF5C4 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,9 @@
 		CEAB33A21AD893F200393DC5 /* qrcode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrcode.png; sourceTree = "<group>"; };
 		CEAB33A41AD8B17300393DC5 /* MyChildCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChildCell.h; sourceTree = "<group>"; };
 		CEAB33A51AD8B17300393DC5 /* MyChildCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyChildCell.m; sourceTree = "<group>"; };
+		CEEF8F901AE05FDF005FF5C4 /* MyMapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMapController.h; sourceTree = "<group>"; };
+		CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMapController.m; sourceTree = "<group>"; };
+		CEEF8F931AE0607F005FF5C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEEF8F941AE0607F005FF5C4 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +80,7 @@
 		CE687B2B1AD3B182007C877F = {
 			isa = PBXGroup;
 			children = (
+				CEEF8F931AE0607F005FF5C4 /* MapKit.framework */,
 				CE687B361AD3B182007C877F /* MyKidCheckin */,
 				CE687B501AD3B182007C877F /* MyKidCheckinTests */,
 				CE687B351AD3B182007C877F /* Products */,
@@ -106,6 +113,8 @@
 				CEAB33A01AD83DB700393DC5 /* MyKidViewDetailController.m */,
 				CEAB33A41AD8B17300393DC5 /* MyChildCell.h */,
 				CEAB33A51AD8B17300393DC5 /* MyChildCell.m */,
+				CEEF8F901AE05FDF005FF5C4 /* MyMapController.h */,
+				CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */,
 			);
 			path = MyKidCheckin;
 			sourceTree = "<group>";
@@ -241,6 +250,7 @@
 			files = (
 				CE687B401AD3B182007C877F /* ViewController.m in Sources */,
 				CE687B3D1AD3B182007C877F /* AppDelegate.m in Sources */,
+				CEEF8F921AE05FDF005FF5C4 /* MyMapController.m in Sources */,
 				CEAB33A61AD8B17300393DC5 /* MyChildCell.m in Sources */,
 				CE687B3A1AD3B182007C877F /* main.m in Sources */,
 				CEAB33A11AD83DB700393DC5 /* MyKidViewDetailController.m in Sources */,

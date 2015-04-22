@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "MyParentTableViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <MyParentTableViewControllerDelegate>
 
 @end
 
@@ -20,8 +20,7 @@
 
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void) onReset {
     NSInteger mode = [[NSUserDefaults standardUserDefaults] integerForKey:@"mode"];
     if (mode) {
         if (mode == 1) {
@@ -40,6 +39,11 @@
     [popup showInView:[UIApplication sharedApplication].keyWindow];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self onReset];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -49,6 +53,7 @@
     [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"mode"];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MyParentTableViewController *vc = (MyParentTableViewController*)[storyboard instantiateViewControllerWithIdentifier:@"myParentViewController"];
+    vc.delegate = self;
 
     UINavigationController *vcNav =[[UINavigationController alloc] initWithRootViewController:vc];
 

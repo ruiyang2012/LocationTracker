@@ -9,21 +9,50 @@
 #import "MyParentTableViewController.h"
 #import "MyKidViewDetailController.h"
 #import "MyChildCell.h"
+#import "MyMapController.h"
+
 
 @interface MyParentTableViewController () <MyKidViewDetailControllerDelegate>{
     NSString * parentId;
     NSMutableArray *objects;
+
 }
 
 @end
 
 @implementation MyParentTableViewController
 
+@synthesize delegate;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     parentId = @"parent"; // use a fake parent id for demo change to real one in the future.
+    [self loadObjects];
 
+}
+
+- (void) loadObjects {
+    if (objects) return;
+    objects = [[NSMutableArray alloc] init];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents directory
+    NSError *error;
+    NSString * fileName = [documentsDirectory stringByAppendingPathComponent:@"kids.info"];
+    NSString *fileContents = [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:&error];
+    for (NSString *line in [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]) {
+        // Do something
+        NSData *objectData = [line dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *json = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:objectData
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&error]];
+        [objects addObject:json];
+    }
+}
+- (IBAction)onReset:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"mode"];
+    [self.delegate onReset];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void) saveObjects {
@@ -56,9 +85,7 @@
 
 - (IBAction)addNewKids:(id)sender {
     NSLog(@"add new kids clicked");
-    if (!objects) {
-        objects = [[NSMutableArray alloc] init];
-    }
+
     [self showChildEdit:YES childId:nil childName:nil];
 }
 
@@ -94,9 +121,20 @@
     return [objects count];
 }
 
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Display Alert Message
+
+    NSDictionary * data = [objects objectAtIndex:indexPath.row];
+    NSLog(@"data is %@", data);
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    MyMapController *vc = (MyMapController*)[storyboard instantiateViewControllerWithIdentifier:@"myMapViewController"];
+    
+
+    
+    [[self navigationController] pushViewController:vc animated:NO];
+
 }
 
 - (NSString *) safeStr:(NSDictionary *) row key:(NSString *) key {
@@ -180,24 +218,6 @@
     return NO;
 }
 
-
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    NSString * identifier = [segue identifier];
-    if ([identifier isEqualToString:@"kidDetailViewController"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        id object = [objects objectAtIndex:indexPath.row];
-        MyKidViewDetailController * kidVC = (MyKidViewDetailController*) [segue destinationViewController] ;
-        kidVC.parentId = parentId;
-        kidVC.childId = [object objectForKey:@"childId"];
-        //[[segue destinationViewController] setDetailItem:object];
-    }
-}
 
 
 @end
