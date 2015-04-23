@@ -27,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+
     parentId = @"parent"; // use a fake parent id for demo change to real one in the future.
     [self loadObjects];
 
@@ -131,7 +132,17 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MyMapController *vc = (MyMapController*)[storyboard instantiateViewControllerWithIdentifier:@"myMapViewController"];
     
-
+    NSDictionary * userLoc = [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
+    vc.childName = @"I am here!";
+    if (userLoc) {
+        NSNumber * lat = [userLoc objectForKey:@"lat"];
+        NSNumber * lng = [userLoc objectForKey:@"lng"];
+        vc.childLoc = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
+    }
+    NSString * geo = [self safeStr:data key:@"geo"];
+    if (geo) {
+        vc.childName = [self safeStr:data key:@"name"];
+    }
     
     [[self navigationController] pushViewController:vc animated:NO];
 

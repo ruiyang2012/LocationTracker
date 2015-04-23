@@ -8,8 +8,11 @@
 
 #import "ViewController.h"
 #import "MyParentTableViewController.h"
+#import <MapKit/MapKit.h>
 
-@interface ViewController () <MyParentTableViewControllerDelegate>
+@interface ViewController () <MyParentTableViewControllerDelegate, CLLocationManagerDelegate> {
+        CLLocationManager * locationManager;
+}
 
 @end
 
@@ -17,8 +20,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = 50.0f;
+    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    [locationManager requestWhenInUseAuthorization];
+    
+    [locationManager startUpdatingLocation];
+    //[locationManager startMonitoringSignificantLocationChanges];
+    //[self RememberLocation:locationManager.location.coordinate];
 }
+
+- (void) RememberLocation:(CLLocationCoordinate2D) loc {
+    NSNumber *lat = [NSNumber numberWithDouble:loc.latitude];
+    NSNumber *lng = [NSNumber numberWithDouble:loc.longitude];
+    NSDictionary *userLocation=@{@"lat":lat,@"lng":lng};
+    [[NSUserDefaults standardUserDefaults] setObject:userLocation forKey:@"userLocation"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation * currentLocation = [locations objectAtIndex:0];
+    [self RememberLocation:currentLocation.coordinate];
+}
+
 
 - (void) onReset {
     NSInteger mode = [[NSUserDefaults standardUserDefaults] integerForKey:@"mode"];

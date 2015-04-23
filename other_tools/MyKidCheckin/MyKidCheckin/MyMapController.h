@@ -10,6 +10,6 @@
 #import <MapKit/MapKit.h>
 
 @interface MyMapController : UIViewController
-
+@property (assign) NSString * childName;
 @property (assign) CLLocationCoordinate2D childLoc;
 @end

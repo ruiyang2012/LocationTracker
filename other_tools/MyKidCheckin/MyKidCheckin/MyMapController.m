@@ -20,6 +20,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    if (self.childLoc.latitude != 0 && self.childLoc.longitude != 0) {
+        MKPointAnnotation *myAnnotation = [[MKPointAnnotation alloc] init];
+        myAnnotation.coordinate = self.childLoc;
+        myAnnotation.title = self.childName;
+        MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(self.childLoc, 500, 500);
+        MKCoordinateRegion adjustedRegion = [self.myMapView regionThatFits:viewRegion];
+        [self.myMapView setRegion:adjustedRegion animated:YES];
+        self.myMapView.showsUserLocation = YES;
+        [self.myMapView addAnnotation:myAnnotation];
+        [self.myMapView setCenterCoordinate:self.childLoc animated:YES];
+    }
 
 }
 

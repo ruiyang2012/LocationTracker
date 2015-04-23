@@ -20,6 +20,8 @@
 		CEAB33A61AD8B17300393DC5 /* MyChildCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CEAB33A51AD8B17300393DC5 /* MyChildCell.m */; };
 		CEEF8F921AE05FDF005FF5C4 /* MyMapController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */; };
 		CEEF8F941AE0607F005FF5C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF8F931AE0607F005FF5C4 /* MapKit.framework */; };
+		CEEF8F971AE827DE005FF5C4 /* ChildQrController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF8F961AE827DE005FF5C4 /* ChildQrController.m */; };
+		CEEF8F9A1AE827F4005FF5C4 /* ChildCheckInController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF8F991AE827F4005FF5C4 /* ChildCheckInController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,10 @@
 		CEEF8F901AE05FDF005FF5C4 /* MyMapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMapController.h; sourceTree = "<group>"; };
 		CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMapController.m; sourceTree = "<group>"; };
 		CEEF8F931AE0607F005FF5C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		CEEF8F951AE827DE005FF5C4 /* ChildQrController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildQrController.h; sourceTree = "<group>"; };
+		CEEF8F961AE827DE005FF5C4 /* ChildQrController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildQrController.m; sourceTree = "<group>"; };
+		CEEF8F981AE827F4005FF5C4 /* ChildCheckInController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCheckInController.h; sourceTree = "<group>"; };
+		CEEF8F991AE827F4005FF5C4 /* ChildCheckInController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCheckInController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +121,10 @@
 				CEAB33A51AD8B17300393DC5 /* MyChildCell.m */,
 				CEEF8F901AE05FDF005FF5C4 /* MyMapController.h */,
 				CEEF8F911AE05FDF005FF5C4 /* MyMapController.m */,
+				CEEF8F951AE827DE005FF5C4 /* ChildQrController.h */,
+				CEEF8F961AE827DE005FF5C4 /* ChildQrController.m */,
+				CEEF8F981AE827F4005FF5C4 /* ChildCheckInController.h */,
+				CEEF8F991AE827F4005FF5C4 /* ChildCheckInController.m */,
 			);
 			path = MyKidCheckin;
 			sourceTree = "<group>";
@@ -249,12 +259,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE687B401AD3B182007C877F /* ViewController.m in Sources */,
+				CEEF8F971AE827DE005FF5C4 /* ChildQrController.m in Sources */,
 				CE687B3D1AD3B182007C877F /* AppDelegate.m in Sources */,
 				CEEF8F921AE05FDF005FF5C4 /* MyMapController.m in Sources */,
 				CEAB33A61AD8B17300393DC5 /* MyChildCell.m in Sources */,
 				CE687B3A1AD3B182007C877F /* main.m in Sources */,
 				CEAB33A11AD83DB700393DC5 /* MyKidViewDetailController.m in Sources */,
 				CEAB33691AD7497600393DC5 /* MyParentTableViewController.m in Sources */,
+				CEEF8F9A1AE827F4005FF5C4 /* ChildCheckInController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
