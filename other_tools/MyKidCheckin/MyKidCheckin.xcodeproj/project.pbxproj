@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0C7D151AE9AA3B00ED979A /* MyCameraLib.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0C7D141AE9AA3B00ED979A /* MyCameraLib.m */; };
+		CE0C7D171AE9AA6200ED979A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0C7D161AE9AA6200ED979A /* AVFoundation.framework */; };
 		CE687B3A1AD3B182007C877F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE687B391AD3B182007C877F /* main.m */; };
 		CE687B3D1AD3B182007C877F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE687B3C1AD3B182007C877F /* AppDelegate.m */; };
 		CE687B401AD3B182007C877F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE687B3F1AD3B182007C877F /* ViewController.m */; };
@@ -35,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE0C7D131AE9AA3B00ED979A /* MyCameraLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCameraLib.h; sourceTree = "<group>"; };
+		CE0C7D141AE9AA3B00ED979A /* MyCameraLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCameraLib.m; sourceTree = "<group>"; };
+		CE0C7D161AE9AA6200ED979A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CE687B341AD3B182007C877F /* MyKidCheckin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyKidCheckin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE687B381AD3B182007C877F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE687B391AD3B182007C877F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -69,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0C7D171AE9AA6200ED979A /* AVFoundation.framework in Frameworks */,
 				CEEF8F941AE0607F005FF5C4 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +92,7 @@
 		CE687B2B1AD3B182007C877F = {
 			isa = PBXGroup;
 			children = (
+				CE0C7D161AE9AA6200ED979A /* AVFoundation.framework */,
 				CEEF8F931AE0607F005FF5C4 /* MapKit.framework */,
 				CE687B361AD3B182007C877F /* MyKidCheckin */,
 				CE687B501AD3B182007C877F /* MyKidCheckinTests */,
@@ -105,6 +112,8 @@
 		CE687B361AD3B182007C877F /* MyKidCheckin */ = {
 			isa = PBXGroup;
 			children = (
+				CE0C7D131AE9AA3B00ED979A /* MyCameraLib.h */,
+				CE0C7D141AE9AA3B00ED979A /* MyCameraLib.m */,
 				CE687B3B1AD3B182007C877F /* AppDelegate.h */,
 				CE687B3C1AD3B182007C877F /* AppDelegate.m */,
 				CE687B3E1AD3B182007C877F /* ViewController.h */,
@@ -259,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE687B401AD3B182007C877F /* ViewController.m in Sources */,
+				CE0C7D151AE9AA3B00ED979A /* MyCameraLib.m in Sources */,
 				CEEF8F971AE827DE005FF5C4 /* ChildQrController.m in Sources */,
 				CE687B3D1AD3B182007C877F /* AppDelegate.m in Sources */,
 				CEEF8F921AE05FDF005FF5C4 /* MyMapController.m in Sources */,

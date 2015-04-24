@@ -9,8 +9,10 @@
 #import "ViewController.h"
 #import "MyParentTableViewController.h"
 #import <MapKit/MapKit.h>
+#import "ChildQrController.h"
+#import "ChildCheckInController.h"
 
-@interface ViewController () <MyParentTableViewControllerDelegate, CLLocationManagerDelegate> {
+@interface ViewController () <MyParentTableViewControllerDelegate, CLLocationManagerDelegate, ChildQrControllerDelegate> {
         CLLocationManager * locationManager;
 }
 
@@ -39,6 +41,12 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(void) onQrDone:(NSString *)childId {
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self asChild];
+    });
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation * currentLocation = [locations objectAtIndex:0];
     [self RememberLocation:currentLocation.coordinate];
@@ -47,6 +55,7 @@
 
 - (void) onReset {
     NSInteger mode = [[NSUserDefaults standardUserDefaults] integerForKey:@"mode"];
+
     if (mode) {
         if (mode == 1) {
             [self asParent];
@@ -55,13 +64,17 @@
         }
         return;
     }
-    // Do any additional setup after loading the view, typically from a nib.
-    UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:@"Select mode:" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:
-                            @"Login as Parent",
-                            @"Login as Child",
-                            nil];
-    popup.tag = 1;
-    [popup showInView:[UIApplication sharedApplication].keyWindow];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        //Run UI Updates
+        // Do any additional setup after loading the view, typically from a nib.
+        UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:@"Select mode:" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:
+                                @"Login as Parent",
+                                @"Login as Child",
+                                nil];
+        popup.tag = 1;
+        [popup showInView:[UIApplication sharedApplication].keyWindow];
+    });
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -87,12 +100,25 @@
 
 - (void) asChild {
     [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"mode"];
+    NSString * childId = [[NSUserDefaults standardUserDefaults] stringForKey:@"childId"];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController * vc = nil;
+
+    if (childId) {
+        vc = [storyboard instantiateViewControllerWithIdentifier:@"childCheckinVC"];
+    } else {
+        vc = [storyboard instantiateViewControllerWithIdentifier:@"childQrCodeVC"];
+    }
+    UINavigationController *vcNav =[[UINavigationController alloc] initWithRootViewController:vc];
+    
+    [self presentViewController:vcNav animated:YES completion:nil];
 }
 
 - (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     switch (popup.tag) {
         case 1: {
+            [popup dismissWithClickedButtonIndex:buttonIndex animated:YES];
             switch (buttonIndex) {
                 case 0:
                     NSLog(@"this is a selection 0");

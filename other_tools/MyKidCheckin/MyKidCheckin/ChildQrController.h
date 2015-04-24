@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChildQrController : UIViewController
+@class ChildQrController;
+@protocol ChildQrControllerDelegate
 
+-(void) onQrDone:(NSString *)childId;
+
+@end
+
+@interface ChildQrController : UIViewController
+@property (nonatomic, assign) id  delegate;
 @end

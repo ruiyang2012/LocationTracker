@@ -7,17 +7,64 @@
 //
 
 #import "ChildQrController.h"
+#import "MyCameraLib.h"
 
-@interface ChildQrController ()
+@interface ChildQrController () {
+    MyCameraLib * camLib;
+}
 @property (weak, nonatomic) IBOutlet UIView *myQrContainer;
 
 @end
 
 @implementation ChildQrController
 
+@synthesize delegate;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+#if TARGET_IPHONE_SIMULATOR
+    NSLog(@"This is simulator mode....");
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.myQrContainer addGestureRecognizer:singleFingerTap];
+    
+#else
+    NSLog(@"This is device mode....");
+    camLib = [[MyCameraLib alloc] init];
+    [camLib setCameraScanMode:CAMERA_QR];
+    MYCAMERACALLBACK block =  ^(UIImage* img, CAMERA_TYPE t, NSString* v) {
+        NSLog(@"type is: %d -- %@", t, v);
+        [self handleQrResult:v];
+    };
+    [camLib setup:self.myQrContainer done:block];
+    [camLib scan];
+#endif
+
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    [self handleQrResult:@"{\"code\" : \"parentId,childId\" }"];
+    //Do stuff here...
+}
+
+- (void) handleQrResult:(NSString *) code {
+    NSData *jsonData = [code dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *e = nil;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+    NSString * qrStr = [json objectForKey:@"code"];
+    NSArray * myIds = [qrStr componentsSeparatedByString:@","];
+    [[NSUserDefaults standardUserDefaults] setObject:myIds[0] forKey:@"parentId"];
+    [[NSUserDefaults standardUserDefaults] setObject:myIds[1] forKey:@"childId"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate onQrDone:myIds[1]];
+    }];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
