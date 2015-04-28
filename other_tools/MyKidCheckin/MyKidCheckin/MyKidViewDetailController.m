@@ -34,6 +34,7 @@
         self.navigationItem.rightBarButtonItem = doneBtn;
     } else {
         self.myText.enabled = NO;
+        self.myText.text = self.childName;
     }
 
 }

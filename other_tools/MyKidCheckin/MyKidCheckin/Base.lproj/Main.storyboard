@@ -159,15 +159,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5G-P5-Wdg">
-                                <rect key="frame" x="36" y="52" width="483" height="218"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fDD-fw-9C1">
-                                <rect key="frame" x="16" y="310" width="257" height="162"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="52"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="fill" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="fDD-fw-9C1">
+                                <rect key="frame" x="35" y="541" width="257" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Checkin">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -175,16 +169,24 @@
                                     <action selector="onCheckIn:" destination="OkJ-Qh-LTO" eventType="touchUpInside" id="etE-K1-mKC"/>
                                 </connections>
                             </button>
+                            <mapView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iBg-Qa-eUj">
+                                <rect key="frame" x="16" y="93" width="555" height="302"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="fDD-fw-9C1" secondAttribute="trailing" constant="311" id="BhZ-Kg-l7u"/>
-                            <constraint firstItem="VXq-qx-L5E" firstAttribute="top" secondItem="fDD-fw-9C1" secondAttribute="bottom" constant="128" id="su8-5O-mWE"/>
+                            <constraint firstItem="fDD-fw-9C1" firstAttribute="leading" secondItem="mJr-wS-bva" secondAttribute="leadingMargin" constant="5" id="LXx-A4-uup"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="iBg-Qa-eUj" secondAttribute="trailing" constant="13" id="Pev-PH-iY2"/>
+                            <constraint firstItem="iBg-Qa-eUj" firstAttribute="leading" secondItem="mJr-wS-bva" secondAttribute="leadingMargin" constant="15" id="hIG-du-pq9"/>
+                            <constraint firstItem="fDD-fw-9C1" firstAttribute="top" secondItem="iBg-Qa-eUj" secondAttribute="bottom" constant="75" id="iRy-IE-dWN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fDD-fw-9C1" secondAttribute="trailing" constant="20" id="oVh-cX-1Yc"/>
+                            <constraint firstItem="VXq-qx-L5E" firstAttribute="top" secondItem="fDD-fw-9C1" secondAttribute="bottom" constant="25" id="rvR-GP-4n4"/>
+                            <constraint firstItem="iBg-Qa-eUj" firstAttribute="top" secondItem="qaS-wl-oyx" secondAttribute="bottom" constant="29" id="weB-YD-96a"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Nyh-yu-uCA"/>
                     <connections>
-                        <outlet property="myCurrentLocation" destination="x5G-P5-Wdg" id="gMU-lc-srT"/>
+                        <outlet property="myMapView" destination="iBg-Qa-eUj" id="8Ze-yZ-IKZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wCC-wi-Z6A" userLabel="First Responder" sceneMemberID="firstResponder"/>

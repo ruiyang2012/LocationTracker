@@ -7,10 +7,12 @@
 //
 
 #import "ChildCheckInController.h"
+#import <MapKit/MapKit.h>
 
-@interface ChildCheckInController ()
+@interface ChildCheckInController () <MKMapViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *myCurrentLocation;
+@property (weak, nonatomic) IBOutlet MKMapView *myMapView;
+
 @end
 
 @implementation ChildCheckInController
@@ -18,6 +20,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.myMapView.delegate = self;
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    //[self zoomToUserLocation:self.myMapView.userLocation];
+    NSDictionary * userLoc = [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
+    if (userLoc) {
+        NSNumber * lat = [userLoc objectForKey:@"lat"];
+        NSNumber * lng = [userLoc objectForKey:@"lng"];
+        [self zoomToUserLocation:CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue])];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -26,6 +40,22 @@
 }
 
 - (IBAction)onCheckIn:(id)sender {
+}
+
+
+- (void)zoomToUserLocation:(CLLocationCoordinate2D)userLocation
+{
+
+    MKCoordinateRegion region;
+    region.center = userLocation;
+    region.span = MKCoordinateSpanMake(0.02, 0.02); //Zoom distance
+    region = [self.myMapView regionThatFits:region];
+    [self.myMapView setRegion:region animated:YES];
+}
+
+- (void)mapView:(MKMapView *)theMapView didUpdateToUserLocation:(MKUserLocation *)location
+{
+    [self zoomToUserLocation:location.location.coordinate];
 }
 
 /*

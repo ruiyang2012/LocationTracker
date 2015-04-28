@@ -99,7 +99,7 @@
     vc.delegate = self;
     vc.allowEdit = allowEdit;
     if (childName) {
-        vc.myText.text = childName;
+        vc.childName = childName;
     }
     
     [[self navigationController] pushViewController:vc animated:NO];
@@ -161,8 +161,7 @@
     NSDictionary * row = [objects objectAtIndex:indexPath.row];
     NSArray * array = @[ [self safeStr:row key:@"name"],  [self safeStr:row key:@"time"],  [self safeStr:row key:@"geo"]];
     cell.myName.text = [array componentsJoinedByString:@"\n"];
-//    cell.myTime.text = [row objectForKey:@"time"];
-//    cell.myGeo.text = [row objectForKey:@"geo"];
+
     cell.childId = [row objectForKey:@"id"];
     cell.parentId = parentId;
     // Configure the cell...

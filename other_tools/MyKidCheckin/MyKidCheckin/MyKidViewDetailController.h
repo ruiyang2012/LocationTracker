@@ -19,6 +19,7 @@
 @interface MyKidViewDetailController : UIViewController
 @property (strong, nonatomic) NSString * parentId;
 @property (strong, nonatomic) NSString * childId;
+@property (strong, nonatomic) NSString * childName;
 @property (assign) BOOL allowEdit;
 @property (nonatomic, assign) id  delegate;
 @property (weak, nonatomic) IBOutlet UITextField *myText;
