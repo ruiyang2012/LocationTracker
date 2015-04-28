@@ -11,9 +11,11 @@
 #import <MapKit/MapKit.h>
 #import "ChildQrController.h"
 #import "ChildCheckInController.h"
+#import "MyApi.h"
 
 @interface ViewController () <MyParentTableViewControllerDelegate, CLLocationManagerDelegate, ChildQrControllerDelegate> {
-        CLLocationManager * locationManager;
+    CLLocationManager * locationManager;
+    CLLocation * currentLocation;
 }
 
 @end
@@ -48,7 +50,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    CLLocation * currentLocation = [locations objectAtIndex:0];
+    currentLocation = [locations objectAtIndex:0];
     [self RememberLocation:currentLocation.coordinate];
 }
 
@@ -106,6 +108,14 @@
 
     if (childId) {
         vc = [storyboard instantiateViewControllerWithIdentifier:@"childCheckinVC"];
+        if (currentLocation) {
+            NSString * lat = [NSString stringWithFormat:@"%f", currentLocation.coordinate.latitude];
+            NSString * lng = [NSString stringWithFormat:@"%f", currentLocation.coordinate.longitude];
+            [MyApi api:@"check_ins" param:@{ @"cid" : childId,
+                                             @"lat" : lat,
+                                             @"lng" : lng,
+                                             @"addr" : @"" }];
+        }
     } else {
         vc = [storyboard instantiateViewControllerWithIdentifier:@"childQrCodeVC"];
     }

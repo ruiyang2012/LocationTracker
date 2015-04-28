@@ -10,6 +10,7 @@
 #import "MyKidViewDetailController.h"
 #import "MyChildCell.h"
 #import "MyMapController.h"
+#import "MyApi.h"
 
 
 @interface MyParentTableViewController () <MyKidViewDetailControllerDelegate>{
@@ -29,6 +30,11 @@
 
 
     parentId = @"parent"; // use a fake parent id for demo change to real one in the future.
+    NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    if (token) {
+        [MyApi api:@"reg_device" param:@{ @"uid" : parentId,
+                                      @"token" : token }];
+    }
     [self loadObjects];
 
 }
@@ -96,6 +102,10 @@
     
     vc.parentId = parentId;
     vc.childId = childId ? childId : [[NSUUID UUID] UUIDString];
+    if (!childId) {
+        [MyApi api:@"set_relation" param:@{ @"child" : vc.childId,
+                                          @"parent" : vc.parentId }];
+    }
     vc.delegate = self;
     vc.allowEdit = allowEdit;
     if (childName) {
@@ -170,7 +180,9 @@
 }
 
 - (void) pingChildAtIndex:(NSIndexPath *) indexPath {
-    
+    NSDictionary * row = [objects objectAtIndex:indexPath.row];
+    [MyApi api:@"where_are_my_kids" param:@{ @"cid" : [row objectForKey:@"id"],
+                                        @"pid" : parentId }];
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {

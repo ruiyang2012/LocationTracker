@@ -8,6 +8,7 @@
 
 #import "ChildCheckInController.h"
 #import <MapKit/MapKit.h>
+#import "MyApi.h"
 
 @interface ChildCheckInController () <MKMapViewDelegate>
 
@@ -40,6 +41,24 @@
 }
 
 - (IBAction)onCheckIn:(id)sender {
+    NSDictionary * userLoc = [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
+    if (userLoc) {
+        NSNumber * lat = [userLoc objectForKey:@"lat"];
+        NSNumber * lng = [userLoc objectForKey:@"lng"];
+        NSString * childId = [[NSUserDefaults standardUserDefaults] stringForKey:@"childId"];
+        [MyApi api:@"check_ins" param:@{ @"cid" : childId,
+                                         @"lat" : [lat stringValue],
+                                         @"lng" : [lng stringValue],
+                                         @"addr" : @"" }];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No User Location info!"
+                                                        message:@"Please check if user location is enabled!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+
 }
 
 

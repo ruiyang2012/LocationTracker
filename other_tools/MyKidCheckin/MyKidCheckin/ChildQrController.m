@@ -8,6 +8,7 @@
 
 #import "ChildQrController.h"
 #import "MyCameraLib.h"
+#import "MyApi.h"
 
 @interface ChildQrController () {
     MyCameraLib * camLib;
@@ -59,6 +60,11 @@
     [[NSUserDefaults standardUserDefaults] setObject:myIds[0] forKey:@"parentId"];
     [[NSUserDefaults standardUserDefaults] setObject:myIds[1] forKey:@"childId"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    if (token) {
+        [MyApi api:@"reg_device" param:@{ @"uid" : myIds[1],
+                                     @"token" : token }];
+    }
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.delegate onQrDone:myIds[1]];
