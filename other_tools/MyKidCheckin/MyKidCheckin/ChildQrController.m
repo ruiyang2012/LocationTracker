@@ -47,7 +47,7 @@
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
-    [self handleQrResult:@"{\"code\" : \"parentId,childId\" }"];
+    [self handleQrResult:@"{\"code\" : \"parent,childId\" }"];
     //Do stuff here...
 }
 
