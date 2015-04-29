@@ -52,6 +52,11 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void) application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Can not register for remote notification! \n %@", error);
+   [[NSUserDefaults standardUserDefaults] setInteger:1  forKey:@"remoteNotificationError"];
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Store the deviceToken in the current installation and save it to Parse.
     NSString* strToken = [[[[deviceToken description]
@@ -59,6 +64,7 @@
                            stringByReplacingOccurrencesOfString: @">" withString: @""]
                           stringByReplacingOccurrencesOfString: @" " withString: @""];
     [[NSUserDefaults standardUserDefaults] setObject:strToken forKey:@"deviceToken"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"remoteNotificationError"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

@@ -43,12 +43,14 @@
 - (IBAction)onCheckIn:(id)sender {
     NSDictionary * userLoc = [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
     if (userLoc) {
+        NSTimeInterval ts = [[NSDate date] timeIntervalSince1970];
         NSNumber * lat = [userLoc objectForKey:@"lat"];
         NSNumber * lng = [userLoc objectForKey:@"lng"];
         NSString * childId = [[NSUserDefaults standardUserDefaults] stringForKey:@"childId"];
         [MyApi api:@"check_ins" param:@{ @"cid" : childId,
                                          @"lat" : [lat stringValue],
                                          @"lng" : [lng stringValue],
+                                         @"ts"  : [NSNumber numberWithDouble:ts],
                                          @"addr" : @"" }];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No User Location info!"

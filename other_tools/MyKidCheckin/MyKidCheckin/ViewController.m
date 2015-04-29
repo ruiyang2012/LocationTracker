@@ -109,11 +109,13 @@
     if (childId) {
         vc = [storyboard instantiateViewControllerWithIdentifier:@"childCheckinVC"];
         if (currentLocation) {
+            NSTimeInterval ts = [[NSDate date] timeIntervalSince1970];
             NSString * lat = [NSString stringWithFormat:@"%f", currentLocation.coordinate.latitude];
             NSString * lng = [NSString stringWithFormat:@"%f", currentLocation.coordinate.longitude];
             [MyApi api:@"check_ins" param:@{ @"cid" : childId,
                                              @"lat" : lat,
                                              @"lng" : lng,
+                                             @"ts"  : [NSNumber numberWithDouble:ts],
                                              @"addr" : @"" }];
         }
     } else {
