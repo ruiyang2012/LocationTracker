@@ -8,6 +8,7 @@
 
 #import "MyApi.h"
 #import <MapKit/MapKit.h>
+#import  <CoreLocation/CLGeocoder.h>
 
 @implementation MyApi
 
@@ -49,9 +50,15 @@
         NSNumber * lat = [userInfo objectForKey:@"lat"];
         NSNumber * lng = [userInfo objectForKey:@"lng"];
         NSNumber * ts = [userInfo objectForKey:@"ts"];
+        NSDate * d = [NSDate dateWithTimeIntervalSince1970:[ts doubleValue]];
+        NSString *dateString = [NSDateFormatter localizedStringFromDate:d
+                                                              dateStyle:NSDateFormatterShortStyle
+                                                              timeStyle:NSDateFormatterShortStyle];
         [obj setObject:lat forKey:@"lat"];
         [obj setObject:lng forKey:@"lng"];
-        [obj setObject:[NSDate dateWithTimeIntervalSince1970:[ts doubleValue]] forKey:@"time"];
+        [obj setObject:dateString forKey:@"time"];
+        NSString * geo = [NSString stringWithFormat:@"%@,%@", lat, lng];
+        [obj setObject:geo forKey:@"geo"];
         CLLocation * loc = [[CLLocation alloc] initWithLatitude:[lat doubleValue] longitude:[lng doubleValue]];
         [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
             
