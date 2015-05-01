@@ -36,6 +36,9 @@
 }
 
 - (void) RememberLocation:(CLLocationCoordinate2D) loc {
+    NSInteger mode = [[NSUserDefaults standardUserDefaults] integerForKey:@"mode"];
+    NSDictionary * dict = [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
+    if (mode != 2 && dict) return;
     NSNumber *lat = [NSNumber numberWithDouble:loc.latitude];
     NSNumber *lng = [NSNumber numberWithDouble:loc.longitude];
     NSDictionary *userLocation=@{@"lat":lat,@"lng":lng};
@@ -110,8 +113,8 @@
         vc = [storyboard instantiateViewControllerWithIdentifier:@"childCheckinVC"];
         if (currentLocation) {
             NSTimeInterval ts = [[NSDate date] timeIntervalSince1970];
-            NSString * lat = [NSString stringWithFormat:@"%f", currentLocation.coordinate.latitude];
-            NSString * lng = [NSString stringWithFormat:@"%f", currentLocation.coordinate.longitude];
+            NSNumber * lat = [NSNumber numberWithDouble:currentLocation.coordinate.latitude];
+            NSNumber * lng = [NSNumber numberWithDouble:currentLocation.coordinate.longitude];
             [MyApi api:@"check_ins" param:@{ @"cid" : childId,
                                              @"lat" : lat,
                                              @"lng" : lng,

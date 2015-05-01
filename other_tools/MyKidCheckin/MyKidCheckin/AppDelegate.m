@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MyApi.h"
 
 @interface AppDelegate ()
 
@@ -24,6 +25,9 @@
                                                                              categories:nil];
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        [self handleMessageFromRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+    }
     return YES;
 }
 
@@ -68,8 +72,19 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)handleMessageFromRemoteNotification:(NSDictionary *)userInfo {
+    NSString * typ = [userInfo objectForKey:@"typ"];
+    if ([@"check_ins" isEqualToString:typ]) {
+        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:@"userLocation"];
+        [MyApi updateUserInfo:userInfo];
+    }
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
+}
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"device token is %@", userInfo);
+    [self handleMessageFromRemoteNotification:userInfo];
 }
 
 @end

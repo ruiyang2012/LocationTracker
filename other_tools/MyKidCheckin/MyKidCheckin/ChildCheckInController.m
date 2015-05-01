@@ -46,10 +46,12 @@
         NSTimeInterval ts = [[NSDate date] timeIntervalSince1970];
         NSNumber * lat = [userLoc objectForKey:@"lat"];
         NSNumber * lng = [userLoc objectForKey:@"lng"];
+        if (!lat) lat = [NSNumber numberWithDouble:0];
+        if (!lng) lng = [NSNumber numberWithDouble:0];
         NSString * childId = [[NSUserDefaults standardUserDefaults] stringForKey:@"childId"];
         [MyApi api:@"check_ins" param:@{ @"cid" : childId,
-                                         @"lat" : [lat stringValue],
-                                         @"lng" : [lng stringValue],
+                                         @"lat" : lat,
+                                         @"lng" : lng,
                                          @"ts"  : [NSNumber numberWithDouble:ts],
                                          @"addr" : @"" }];
     } else {

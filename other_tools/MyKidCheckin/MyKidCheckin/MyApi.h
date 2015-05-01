@@ -12,4 +12,8 @@
 
 + (void) api:(NSString *) path param:(NSDictionary *) request;
 
++ (NSMutableArray *) loadObjects;
++ (void) saveObject:(NSMutableArray *) objects;
++ (void) updateUserInfo:(NSDictionary *) userInfo;
+
 @end
